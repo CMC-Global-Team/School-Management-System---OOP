@@ -34,11 +34,11 @@ public class GradeServices {
     public boolean addGrade(String gradeID, String studentID, String subjectID, int gradeType) {
 
         // Validate input
-        if (StudentService.getInstance().isStudentIdExists(studentID)) {
+        if (!StudentService.getInstance().isStudentIdExists(studentID)) {
             System.out.println("Không tìm thấy học sinh có mã: " + studentID);
             return false;
         }
-        if (SubjectService.getInstance().isSubjectIdExists(subjectID)) {
+        if (!SubjectService.getInstance().isSubjectIdExists(subjectID)) {
             System.out.println("Không tìm thấy môn học có mã: " + subjectID);
             return false;
         }
@@ -300,6 +300,39 @@ public class GradeServices {
         double finalAverageGrade = averageGrade / coefficient;
         System.out.println("Điểm trung bình: " + finalAverageGrade);
     }
+
+    public double DAverageScore(String studentID){
+        List<Grade> gradesStudent = getAllGradeByStudentID(studentID);
+        double averageGrade = 0;
+        double coefficient = 0;
+        while(!gradesStudent.isEmpty()){
+            Grade firstG = gradesStudent.get(0);
+            double r = 0;
+            if(firstG != null){
+                List<Grade> gradeSubject = getAllGradeBySubjectID(firstG.getSubjectId(), studentID);
+                if(!gradeSubject.isEmpty()) {
+                    for (Grade g : gradeSubject) {
+                        r = 0;
+                        if (g != null && g.getGradeType().equalsIgnoreCase("thuong xuyen")) {
+                            r += g.getScore() * 20;
+                        }
+                        if (g != null && g.getGradeType().equalsIgnoreCase("giua ky")) {
+                            r += g.getScore() * 30;
+                        }
+                        if (g != null && g.getGradeType().equalsIgnoreCase("cuoi ky")) {
+                            r += g.getScore() * 50;
+                        }
+                    }
+                    r = r / 100;
+                    averageGrade = r * SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
+                    coefficient += SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
+                }
+                gradesStudent = remove(gradesStudent, firstG.getSubjectId());
+            }
+        }
+        return averageGrade / coefficient;
+    }
+
     private List<Grade> remove(List<Grade> grades, String subjectID){
         List<Grade> results = new ArrayList<>();
         for (Grade grade : grades) {

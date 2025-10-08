@@ -12,8 +12,8 @@ public class MenuGrade extends AbstractScreen {
     private final SearchForStudentGradesScreen searchForStudentGradesScreen;
     private final AverageGradeScreen averageGradeScreen;
     private final GradeClassificationScreen gradeClassificationScreen;
-    private final ReportScreen reportScreen;
-    private final ExportScreen exportScreen;
+    //private final ReportScreen reportScreen;
+//    private final ExportScreen exportScreen;
 
     public MenuGrade() {
         super();
@@ -23,8 +23,8 @@ public class MenuGrade extends AbstractScreen {
         this.searchForStudentGradesScreen = new SearchForStudentGradesScreen();
         this.averageGradeScreen = new AverageGradeScreen();
         this.gradeClassificationScreen = new GradeClassificationScreen();
-        this.reportScreen = new ReportScreen();
-        this.exportScreen = new ExportScreen();
+        //this.reportScreen = new ReportScreen();
+        //this.exportScreen = new ExportScreen();
 
     }
     @Override
@@ -77,14 +77,14 @@ public class MenuGrade extends AbstractScreen {
                     gradeClassificationScreen.display();
                     gradeClassificationScreen.handleInput();
                     break;
-                case 7:
-                    reportScreen.display();
-                    reportScreen.handleInput();
-                    break;
-                case 8:
-                    exportScreen.display();
-                    exportScreen.handleInput();
-                    break;
+//                case 7:
+//                    reportScreen.display();
+//                    reportScreen.handleInput();
+//                    break;
+//                case 8:
+//                    exportScreen.display();
+//                    exportScreen.handleInput();
+//                    break;
                 case 0:
                     System.out.println("\nĐang quay lại menu chính...");
                     running = false;
