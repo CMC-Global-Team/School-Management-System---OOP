@@ -1,10 +1,7 @@
 package Services;
 
 import Models.Grade;
-import Screen.Grade.DeleteGradeScreen;
-import Screen.Grade.SearchForStudentGradesScreen;
 import Utils.InputUtil;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -269,77 +266,173 @@ public class GradeServices {
 
     public void AverageScore(String studentID){
         List<Grade> gradesStudent = getAllGradeByStudentID(studentID);
-        double averageGrade = 0;
-        double coefficient = 0;
-        while(!gradesStudent.isEmpty()){
-            Grade firstG = gradesStudent.get(0);
-            double r = 0;
-            if(firstG != null){
-                List<Grade> gradeSubject = getAllGradeBySubjectID(firstG.getSubjectId(), studentID);
-                if(!gradeSubject.isEmpty()) {
-                    for (Grade g : gradeSubject) {
-                        r = 0;
-                        if (g != null && g.getGradeType().equalsIgnoreCase("thuong xuyen")) {
-                            r += g.getScore() * 20;
-                        }
-                        if (g != null && g.getGradeType().equalsIgnoreCase("giua ky")) {
-                            r += g.getScore() * 30;
-                        }
-                        if (g != null && g.getGradeType().equalsIgnoreCase("cuoi ky")) {
-                            r += g.getScore() * 50;
-                        }
-                    }
-                    r = r / 100;
-                    System.out.println("Điểm trung bình môn " + firstG.getSubjectId() + ": " + r);
-                    averageGrade = r * SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
-                    coefficient += SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
+        if (gradesStudent.isEmpty()) {
+            System.out.println("Không có điểm nào cho học sinh: " + studentID);
+            return;
+        }
+        
+        double totalWeightedGrade = 0;
+        double totalCoefficient = 0;
+        
+        // Lấy danh sách các môn học duy nhất
+        List<String> uniqueSubjects = gradesStudent.stream()
+                .map(Grade::getSubjectId)
+                .distinct()
+                .collect(java.util.stream.Collectors.toList());
+        
+        System.out.println("\n┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           ĐIỂM TRUNG BÌNH TỪNG MÔN                        │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-15s │ %-12s │ %-12s │ %-12s │ %-12s │%n", 
+            "Môn học", "Thường xuyên", "Giữa kỳ", "Cuối kỳ", "TB môn");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        
+        for (String subjectId : uniqueSubjects) {
+            List<Grade> subjectGrades = getAllGradeBySubjectID(subjectId, studentID);
+            
+            double txScore = 0, gkScore = 0, ckScore = 0;
+            boolean hasTx = false, hasGk = false, hasCk = false;
+            
+            for (Grade grade : subjectGrades) {
+                switch (grade.getGradeType().toLowerCase()) {
+                    case "thuong xuyen":
+                        txScore = grade.getScore();
+                        hasTx = true;
+                        break;
+                    case "giua ky":
+                        gkScore = grade.getScore();
+                        hasGk = true;
+                        break;
+                    case "cuoi ky":
+                        ckScore = grade.getScore();
+                        hasCk = true;
+                        break;
                 }
-                gradesStudent = remove(gradesStudent, firstG.getSubjectId());
+            }
+            
+            // Tính điểm trung bình môn
+            double subjectAverage = 0;
+            if (hasTx && hasGk && hasCk) {
+                subjectAverage = (txScore * 0.2 + gkScore * 0.3 + ckScore * 0.5);
+            } else if (hasTx && hasCk) {
+                subjectAverage = (txScore * 0.3 + ckScore * 0.7);
+            } else if (hasGk && hasCk) {
+                subjectAverage = (gkScore * 0.4 + ckScore * 0.6);
+            } else if (hasCk) {
+                subjectAverage = ckScore;
+            } else {
+                System.out.printf("│ %-15s │ %-12s │ %-12s │ %-12s │ %-12s │%n", 
+                    subjectId, "Chưa có", "Chưa có", "Chưa có", "Chưa đủ");
+                continue;
+            }
+            
+            System.out.printf("│ %-15s │ %-12.1f │ %-12.1f │ %-12.1f │ %-12.2f │%n", 
+                subjectId, txScore, gkScore, ckScore, subjectAverage);
+            
+            // Lấy hệ số môn học
+            var subjectOpt = SubjectService.getInstance().findById(subjectId);
+            if (subjectOpt.isPresent()) {
+                double coefficient = subjectOpt.get().getConfficient();
+                totalWeightedGrade += subjectAverage * coefficient;
+                totalCoefficient += coefficient;
             }
         }
-        double finalAverageGrade = averageGrade / coefficient;
-        System.out.println("Điểm trung bình: " + finalAverageGrade);
+        
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+        
+        if (totalCoefficient > 0) {
+            double finalAverage = totalWeightedGrade / totalCoefficient;
+            System.out.printf("\nĐiểm trung bình tổng kết: %.2f%n", finalAverage);
+            
+            // Xếp loại học lực
+            String classification = getClassification(finalAverage);
+            System.out.println("Xếp loại học lực: " + classification);
+        } else {
+            System.out.println("Không thể tính điểm trung bình do thiếu hệ số môn học.");
+        }
     }
 
     public double DAverageScore(String studentID){
         List<Grade> gradesStudent = getAllGradeByStudentID(studentID);
-        double averageGrade = 0;
-        double coefficient = 0;
-        while(!gradesStudent.isEmpty()){
-            Grade firstG = gradesStudent.get(0);
-            double r = 0;
-            if(firstG != null){
-                List<Grade> gradeSubject = getAllGradeBySubjectID(firstG.getSubjectId(), studentID);
-                if(!gradeSubject.isEmpty()) {
-                    for (Grade g : gradeSubject) {
-                        r = 0;
-                        if (g != null && g.getGradeType().equalsIgnoreCase("thuong xuyen")) {
-                            r += g.getScore() * 20;
-                        }
-                        if (g != null && g.getGradeType().equalsIgnoreCase("giua ky")) {
-                            r += g.getScore() * 30;
-                        }
-                        if (g != null && g.getGradeType().equalsIgnoreCase("cuoi ky")) {
-                            r += g.getScore() * 50;
-                        }
-                    }
-                    r = r / 100;
-                    averageGrade = r * SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
-                    coefficient += SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
+        if (gradesStudent.isEmpty()) {
+            return 0.0;
+        }
+        
+        double totalWeightedGrade = 0;
+        double totalCoefficient = 0;
+        
+        // Lấy danh sách các môn học duy nhất
+        List<String> uniqueSubjects = gradesStudent.stream()
+                .map(Grade::getSubjectId)
+                .distinct()
+                .collect(java.util.stream.Collectors.toList());
+        
+        for (String subjectId : uniqueSubjects) {
+            List<Grade> subjectGrades = getAllGradeBySubjectID(subjectId, studentID);
+            
+            double txScore = 0, gkScore = 0, ckScore = 0;
+            boolean hasTx = false, hasGk = false, hasCk = false;
+            
+            for (Grade grade : subjectGrades) {
+                switch (grade.getGradeType().toLowerCase()) {
+                    case "thuong xuyen":
+                        txScore = grade.getScore();
+                        hasTx = true;
+                        break;
+                    case "giua ky":
+                        gkScore = grade.getScore();
+                        hasGk = true;
+                        break;
+                    case "cuoi ky":
+                        ckScore = grade.getScore();
+                        hasCk = true;
+                        break;
                 }
-                gradesStudent = remove(gradesStudent, firstG.getSubjectId());
+            }
+            
+            // Tính điểm trung bình môn
+            double subjectAverage = 0;
+            if (hasTx && hasGk && hasCk) {
+                subjectAverage = (txScore * 0.2 + gkScore * 0.3 + ckScore * 0.5);
+            } else if (hasTx && hasCk) {
+                subjectAverage = (txScore * 0.3 + ckScore * 0.7);
+            } else if (hasGk && hasCk) {
+                subjectAverage = (gkScore * 0.4 + ckScore * 0.6);
+            } else if (hasCk) {
+                subjectAverage = ckScore;
+            } else {
+                continue; // Bỏ qua môn chưa đủ điểm
+            }
+            
+            // Lấy hệ số môn học
+            var subjectOpt = SubjectService.getInstance().findById(subjectId);
+            if (subjectOpt.isPresent()) {
+                double coefficient = subjectOpt.get().getConfficient();
+                totalWeightedGrade += subjectAverage * coefficient;
+                totalCoefficient += coefficient;
             }
         }
-        return averageGrade / coefficient;
+        
+        return totalCoefficient > 0 ? totalWeightedGrade / totalCoefficient : 0.0;
+    }
+    
+    /**
+     * Xếp loại học lực dựa trên điểm trung bình
+     */
+    public String getClassification(double averageScore) {
+        if (averageScore >= 9.0) {
+            return "Xuất sắc";
+        } else if (averageScore >= 8.0) {
+            return "Giỏi";
+        } else if (averageScore >= 6.5) {
+            return "Khá";
+        } else if (averageScore >= 5.0) {
+            return "Trung bình";
+        } else if (averageScore >= 3.5) {
+            return "Yếu";
+        } else {
+            return "Kém";
+        }
     }
 
-    private List<Grade> remove(List<Grade> grades, String subjectID){
-        List<Grade> results = new ArrayList<>();
-        for (Grade grade : grades) {
-            if(grade != null && !grade.getSubjectId().equals(subjectID)) {
-                results.add(grade);
-            }
-        }
-        return results;
-    }
 }
