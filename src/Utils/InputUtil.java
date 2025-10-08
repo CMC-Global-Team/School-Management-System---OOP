@@ -1,6 +1,8 @@
 package Utils;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,4 +64,17 @@ public class InputUtil {
         }
     }
 
+    public static LocalDate getDate(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt + " (yyyy-MM-dd): ");
+                String input = scanner.nextLine().trim();
+                return LocalDate.parse(input, DATE_FORMATTER);
+            } catch (DateTimeParseException e) {
+                System.out.println("Vui lòng nhập ngày theo định dạng yyyy-MM-dd!");
+            }
+        }
+    }
+
+    
 }
