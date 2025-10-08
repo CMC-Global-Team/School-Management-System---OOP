@@ -218,4 +218,50 @@ public class GradeServices {
     public int getTotalGradeRecords() {
         return repository.count();
     }
+
+    public List<Grade> searchGrade(String keyword) {
+        return repository.search(keyword);
+    }
+
+    /**
+     * Hiển thị kết quả tìm kiếm
+     */
+    public void displaySearchResults(String keyword) {
+        List<Grade> results = searchGrade(keyword);
+
+        if (results.isEmpty()) {
+            System.out.println("\nKhông tìm thấy lớp học nào phù hợp với từ khóa: '" + keyword + "'");
+            return;
+        }
+
+        System.out.println("\n┌───────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                      KẾT QUẢ TÌM KIẾM                              │");
+        System.out.println("├────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-10s %-25s %-15s %-15s │%n", "Mã điểm", "Mã HS", "Mã môn", "Niên Khóa");
+        System.out.println("├────────────────────────────────────────────────────────────────────┤");
+
+        for (Grade Grade : results) {
+            System.out.printf("│ %-10s %-25s %-15s %-15s │%n",
+                    truncate(Grade.getGradeId(), 10),
+                    truncate(Grade.getStudentId(), 25),
+                    truncate(Grade.getSubjectId(), 15),
+                    truncate(Grade.getSchoolYear(), 20)
+            );
+        }
+
+        System.out.println("└─────────────────────────────────────────────────────────────────────┘");
+    }
+
+    /**
+     * Helper method để cắt chuỗi cho vừa với độ rộng
+     */
+    private String truncate(String str, int maxLength) {
+        if (str == null) {
+            return "";
+        }
+        if (str.length() <= maxLength) {
+            return str;
+        }
+        return str.substring(0, maxLength - 3) + "...";
+    }
 }
