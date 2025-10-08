@@ -177,4 +177,118 @@ public class TuitionService {
             return false;
         }
     }
+
+    /**
+     * Cập nhật học phí từ các input (có thể bỏ trống nếu không muốn thay đổi)
+     */
+    public boolean updateTuition(Tuition t,
+                                 String studentIdInput,
+                                 String semesterInput,
+                                 String schoolYearInput,
+                                 String amountInput,
+                                 String paymentDateInput,
+                                 String statusInput,
+                                 String methodInput,
+                                 String noteInput) {
+        if (t == null) {
+            System.out.println("Lỗi: Tuition không được null!");
+            return false;
+        }
+
+        if (!repository.exists(t.getTuitionId())) {
+            System.out.println("Lỗi: Không tìm thấy học phí với mã '" + t.getTuitionId() + "'!");
+            return false;
+        }
+
+        // StudentId
+        if (studentIdInput != null && !studentIdInput.isEmpty()) {
+            t.setStudentId(studentIdInput);
+        }
+
+        // Semester
+        if (semesterInput != null && !semesterInput.isEmpty()) {
+            try {
+                t.setSemester(Integer.parseInt(semesterInput));
+            } catch (NumberFormatException ignored) {}
+        }
+
+        // SchoolYear
+
+        if (schoolYearInput != null && !schoolYearInput.isEmpty()) {
+            if (schoolYearInput.matches("^\\d{4}-\\d{4}$")) {
+                String[] parts = schoolYearInput.split("-");
+                int startYear = Integer.parseInt(parts[0]);
+                int endYear = Integer.parseInt(parts[1]);
+                if (startYear <= endYear) {
+                    t.setSchoolYear(schoolYearInput);
+                } else {
+                    System.out.println(" Năm học không hợp lệ, giữ nguyên giá trị cũ.");
+                }
+            } else {
+                System.out.println(" Năm học sai định dạng, giữ nguyên giá trị cũ.");
+            }
+        }
+
+        if (schoolYearInput != null && !schoolYearInput.isEmpty()) {
+            if (schoolYearInput.matches("^\\d{4}-\\d{4}$")) {
+                t.setSchoolYear(schoolYearInput);
+            }
+        }
+
+        // Amount
+        if (amountInput != null && !amountInput.isEmpty()) {
+            try {
+                double money = Double.parseDouble(amountInput);
+                if (money >= 0) t.setAmount(money);
+            } catch (NumberFormatException ignored) {}
+        }
+
+        // PaymentDate
+        if (paymentDateInput != null && !paymentDateInput.isEmpty()) {
+            try {
+                LocalDate newDate = LocalDate.parse(paymentDateInput, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                if (!newDate.isAfter(LocalDate.now())) t.setPaymentDate(newDate);
+            } catch (Exception ignored) {}
+        }
+
+        // Status
+
+        if (statusInput != null && !statusInput.isEmpty()) {
+            int statusCode = -1;
+            if (statusInput.matches("[01]")) {
+                statusCode = Integer.parseInt(statusInput);
+            }
+            if (statusCode == 0) t.setStatus("CHƯA THU");
+            else if (statusCode == 1) t.setStatus("ĐÃ THU");
+
+            // Method
+            if ("ĐÃ THU".equals(t.getStatus())) {
+                int methodCode = -1;
+                if (methodInput != null && methodInput.matches("[01]")) {
+                    methodCode = Integer.parseInt(methodInput);
+                }
+                if (methodCode == 0) t.setMethod("TIỀN MẶT");
+                else if (methodCode == 1) t.setMethod("CHUYỂN KHOẢN");
+            } else {
+                t.setMethod(null);
+            }
+        }
+
+
+        // Note
+        if (noteInput != null && !noteInput.isEmpty()) {
+            t.setNote(noteInput);
+        }
+
+        // Cập nhật vào repository
+        if (repository.update(t)) {
+            System.out.println(" Cập nhật học phí thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể cập nhật học phí!");
+            return false;
+        }
+    }
+
+
 }
