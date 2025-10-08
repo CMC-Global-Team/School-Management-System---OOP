@@ -88,18 +88,8 @@ public class Teacher extends Person implements IEntity {
 
     @Override
     public String toString() {
-        String subjects = "[" + String.join(",", teacherSubjects) + "]";
-        return "Teacher{" +
-                "ID='" + id + '\'' +
-                ", Name='" + name + '\'' +
-                ", Subjects=[" + subjects + "]" +
-                ", Degree='" + teacherDegree + '\'' +
-                ", Experience=" + teacherExperience +
-                ", Email='" + teacherEmail + '\'' +
-                ", Phone='" + teacherPhone + '\'' +
-                ", Homeroom='" + teacherHomeroom + '\'' +
-                ", Status='" + status + '\'' +
-                '}';
+        return id + "," + name + "," + teacherSubjects + "," + teacherDegree + "," + teacherExperience + "," +
+                teacherEmail + "," + teacherPhone + "," + teacherHomeroom + "," + status;
     }
 
     @Override
