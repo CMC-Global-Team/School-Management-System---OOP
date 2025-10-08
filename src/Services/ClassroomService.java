@@ -123,5 +123,12 @@ public class ClassroomService {
         return repository.findAll();
     }
     
+    /**
+     * Tìm kiếm lớp học theo từ khóa
+     */
+    public List<Classroom> searchClasses(String keyword) {
+        return repository.search(keyword);
+    }
     
+
 }
