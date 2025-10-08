@@ -54,28 +54,28 @@ public class MenuTuition extends AbstractScreen {
                     recordTuitionScreen.handleInput();
                     break;
                 case 2:
-                    editTuitionScreen.handleInput();
                     editTuitionScreen.display();
+                    editTuitionScreen.handleInput();
                     break;
                 case 3:
-                    deleteTuitionScreen.handleInput();
                     deleteTuitionScreen.display();
+                    deleteTuitionScreen.handleInput();
                     break;
                 case 4:
-                    searchForTuition.handleInput();
                     searchForTuition.display();
+                    searchForTuition.handleInput();
                     break;
                 case 5:
-                    tuitionDiscountScreen.handleInput();
                     tuitionDiscountScreen.display();
+                    tuitionDiscountScreen.handleInput();
                     break;
                 case 6:
-                    financialReportScreen.handleInput();
                     financialReportScreen.display();
+                    financialReportScreen.handleInput();
                     break;
                 case 7:
-                    exportTuitionListScreen.handleInput();
                     exportTuitionListScreen.display();
+                    exportTuitionListScreen.handleInput();
                     break;
                 case 0:
                     System.out.println("\nDang quay lai menu chinh...");

@@ -16,14 +16,14 @@ public class RecordTuitionScreen extends AbstractScreen {
         System.out.println("│       GHI NHẬN THANH TOÁN HỌC PHÍ        │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\n📋 HƯỚNG DẪN SỬ DỤNG:");
-        System.out.println("• Mã học phí: Định dạng TFxxxx (VD: TF0001)");
-        System.out.println("• Mã học sinh: Phải tồn tại trong hệ thống");
-        System.out.println("• Năm học: Định dạng YYYY-YYYY (VD: 2024-2025)");
-        System.out.println("• Số tiền: Nhập theo nghìn đồng (VD: 5 = 5,000 VND)");
-        System.out.println("• Ngày thu: Định dạng dd/MM/yyyy (VD: 09/10/2024)");
-        System.out.println("• Trạng thái: 0=Chưa thu, 1=Đã thu");
-        System.out.println("• Phương thức: 0=Tiền mặt, 1=Chuyển khoản");
+        System.out.println("\nHƯỚNG DẪN SỬ DỤNG:");
+        System.out.println("- Mã học phí: Định dạng TFxxxx (VD: TF0001)");
+        System.out.println("- Mã học sinh: Phải tồn tại trong hệ thống");
+        System.out.println("- Năm học: Định dạng YYYY-YYYY (VD: 2024-2025)");
+        System.out.println("- Số tiền: Nhập theo nghìn đồng (VD: 5 = 5,000 VND)");
+        System.out.println("- Ngày thu: Định dạng dd/MM/yyyy (VD: 09/10/2024)");
+        System.out.println("- Trạng thái: 0=Chưa thu, 1=Đã thu");
+        System.out.println("- Phương thức: 0=Tiền mặt, 1=Chuyển khoản");
     }
     
     @Override
@@ -50,11 +50,11 @@ public class RecordTuitionScreen extends AbstractScreen {
                 paymentDate = LocalDate.parse(dateStr, formatter);
                 
                 if (paymentDate.isAfter(LocalDate.now())) {
-                    System.out.println("❌ Ngày thu không được vượt quá hôm nay!");
+                    System.out.println("Ngày thu không được vượt quá hôm nay!");
                     paymentDate = null;
                 }
             } catch (Exception e) {
-                System.out.println("❌ Định dạng ngày không hợp lệ! Vui lòng nhập lại.");
+                System.out.println("Định dạng ngày không hợp lệ! Vui lòng nhập lại.");
             }
         }
         
@@ -68,16 +68,16 @@ public class RecordTuitionScreen extends AbstractScreen {
                                            amount, paymentDate, method, status, note);
         
         if (success) {
-            System.out.println("\n✅ Thêm học phí thành công!");
+            System.out.println("\nThêm học phí thành công!");
         } else {
-            System.out.println("\n❌ Thêm học phí thất bại!");
+            System.out.println("\nThêm học phí thất bại!");
         }
         
         pause();
     }
     
     private void displayStudentList() {
-        System.out.println("\n📚 DANH SÁCH HỌC SINH HIỆN CÓ:");
+        System.out.println("\nDANH SÁCH HỌC SINH HIỆN CÓ:");
         System.out.println("┌─────────────────────────────────────────────────────────┐");
         System.out.printf("│ %-10s │ %-25s │ %-15s │%n", "Mã HS", "Tên học sinh", "Lớp");
         System.out.println("├─────────────────────────────────────────────────────────┤");

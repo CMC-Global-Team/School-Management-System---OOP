@@ -18,13 +18,13 @@ public class SearchForTuition extends AbstractScreen {
         System.out.println("│         TRA CỨU THÔNG TIN HỌC PHÍ        │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\n📋 HƯỚNG DẪN TÌM KIẾM:");
-        System.out.println("• Tìm theo mã học phí: TF0001");
-        System.out.println("• Tìm theo mã học sinh: BS2");
-        System.out.println("• Tìm theo năm học: 2024-2025");
-        System.out.println("• Tìm theo trạng thái: đã thu, chưa thu");
-        System.out.println("• Tìm theo phương thức: tiền mặt, chuyển khoản");
-        System.out.println("• Để trống để xem tất cả học phí");
+        System.out.println("\nHƯỚNG DẪN TÌM KIẾM:");
+        System.out.println("- Tìm theo mã học phí: TF0001");
+        System.out.println("- Tìm theo mã học sinh: BS2");
+        System.out.println("- Tìm theo năm học: 2024-2025");
+        System.out.println("- Tìm theo trạng thái: đã thu, chưa thu");
+        System.out.println("- Tìm theo phương thức: tiền mặt, chuyển khoản");
+        System.out.println("- Để trống để xem tất cả học phí");
     }
 
     @Override
@@ -65,7 +65,7 @@ public class SearchForTuition extends AbstractScreen {
                 displayAllTuitions(service);
                 break;
             default:
-                System.out.println("❌ Lựa chọn không hợp lệ!");
+                System.out.println("Lựa chọn không hợp lệ!");
         }
         
         pause();
@@ -78,7 +78,7 @@ public class SearchForTuition extends AbstractScreen {
         if (tuitionOpt.isPresent()) {
             displayTuitionDetails(tuitionOpt.get());
         } else {
-            System.out.println("❌ Không tìm thấy học phí với mã: " + tuitionId);
+            System.out.println("Không tìm thấy học phí với mã: " + tuitionId);
         }
     }
     
@@ -88,7 +88,7 @@ public class SearchForTuition extends AbstractScreen {
         // Kiểm tra học sinh có tồn tại không
         StudentService studentService = StudentService.getInstance();
         if (!studentService.isStudentIdExists(studentId)) {
-            System.out.println("❌ Không tìm thấy học sinh với mã: " + studentId);
+            System.out.println("Không tìm thấy học sinh với mã: " + studentId);
             return;
         }
         
@@ -149,7 +149,7 @@ public class SearchForTuition extends AbstractScreen {
     
     private void displayTuitionList(List<Tuition> tuitions, String title) {
         if (tuitions.isEmpty()) {
-            System.out.println("\n❌ Không tìm thấy học phí nào!");
+            System.out.println("\nKhông tìm thấy học phí nào!");
             return;
         }
         
@@ -174,6 +174,6 @@ public class SearchForTuition extends AbstractScreen {
         }
         
         System.out.println("└─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
-        System.out.println("📊 Tổng số: " + tuitions.size() + " học phí");
+        System.out.println("Tổng số: " + tuitions.size() + " học phí");
     }
 }
