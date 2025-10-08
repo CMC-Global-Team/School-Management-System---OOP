@@ -130,5 +130,12 @@ public class ClassroomService {
         return repository.search(keyword);
     }
     
-
+    /**
+     * Kiểm tra mã lớp đã tồn tại chưa
+     */
+    public boolean isClassIdExists(String classId) {
+        return repository.exists(classId);
+    }
+    
+    
 }
