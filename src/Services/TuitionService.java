@@ -351,4 +351,10 @@ public class TuitionService {
         return repository.exists(tuitionId);
     }
 
+    /**
+     * Đếm tổng số học phí
+     */
+    public int getTotalTuitions() {
+        return repository.count();
+    }
 }
