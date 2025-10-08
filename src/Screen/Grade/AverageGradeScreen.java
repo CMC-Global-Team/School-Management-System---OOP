@@ -1,6 +1,13 @@
 package Screen.Grade;
 
+import Models.Grade;
+import Models.Subject;
 import Screen.AbstractScreen;
+import Utils.FileUtil;
+import Utils.InputUtil;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AverageGradeScreen extends AbstractScreen{
     @Override
@@ -12,13 +19,41 @@ public class AverageGradeScreen extends AbstractScreen{
 
     @Override
     public void handleInput() {
-        System.out.println("\n[Thong bao] Chuc nang tinh diem cho Hoc Sinh dang duoc phat trien...");
-        System.out.println("Cac thong tin se bao gom:");
-        System.out.println("- Ma hoc sinh");
-        System.out.println("- Ma mon hoc");
-        System.out.println("- Nhap diem can tinh");
-        System.out.println("- Hoc ki");
-        System.out.println("- Nam hoc");
+        List<String> gradeLines = new ArrayList<>();
+        List<String> studentResults;
+        List<String> subjectResults;
+        double averageGrade = 0;
+        double coefficient = 0;
+        try{
+            if (FileUtil.fileExists("data/grades.txt")) {
+                gradeLines = FileUtil.readLines("data/grades.txt");
+            }
+        }catch (IOException e) {
+            System.out.println("Có lỗi xảy ra khi đọc file điểm số: " + e.getMessage());
+        }
+        String studentID = InputUtil.getString("Mã học sinh(Enter để quay lại): ");
+        if(studentID.isEmpty()){
+            return;
+        }
+        studentResults = SearchForStudentGradesScreen.findGradesByStudentID(gradeLines, studentID);
+        while(!studentResults.isEmpty()){
+            String firstLine = studentResults.get(0);
+            Grade g1 = Grade.fromString(firstLine);
+            double r;
+            if(g1 != null){
+                subjectResults = SearchForStudentGradesScreen.findGradesBySubjectID(studentResults, g1.getSubjectId());
+                if(!subjectResults.isEmpty()) {
+                    r = getAvrSubjectScoreBySubjectLines(subjectResults);
+                    System.out.printf("Điểm trung bình môn " + g1.getSubjectId() + ": %.2f \n",r);
+                    averageGrade += r * getSubjectCoefficientsBySubjectID(g1.getSubjectId());
+                    coefficient += getSubjectCoefficientsBySubjectID(g1.getSubjectId());
+                }
+                studentResults = DeleteGradeScreen.ignoreSubjectID(g1.getSubjectId(), studentResults);
+            }
+        }
+        double finalAverageGrade = averageGrade / coefficient;
+        System.out.printf("Điểm trung bình: %.2f", finalAverageGrade);
         pause();
     }
+
 }
