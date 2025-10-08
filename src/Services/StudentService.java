@@ -254,5 +254,43 @@ public class StudentService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    /**
+     * Xuất danh sách học sinh ra file .txt
+     */
+    public boolean exportStudentsToFile(String filename, List<Student> students) {
+        try (java.io.FileWriter writer = new java.io.FileWriter(filename)) {
+            
+            // Ghi header
+            writer.write("DANH SÁCH HỌC SINH\n");
+            writer.write("=".repeat(80) + "\n");
+            writer.write(String.format("%-10s %-25s %-15s %-10s %-10s %-15s %-15s %-20s %-10s\n",
+                    "Mã HS", "Họ Tên", "Ngày Sinh", "Giới Tính", "Lớp", "Khóa", "SĐT PH", "Địa Chỉ", "Trạng Thái"));
+            writer.write("-".repeat(80) + "\n");
+            
+            // Ghi dữ liệu học sinh
+            for (Student student : students) {
+                writer.write(String.format("%-10s %-25s %-15s %-10s %-10s %-15s %-15s %-20s %-10s\n",
+                        student.getId(),
+                        student.getName(),
+                        student.getDateOfBirth(),
+                        student.getGender(),
+                        student.getClassName(),
+                        student.getCourse(),
+                        student.getParentPhone(),
+                        student.getAddress(),
+                        student.getStatus()));
+            }
+            
+            writer.write("-".repeat(80) + "\n");
+            writer.write("Tổng số học sinh: " + students.size() + "\n");
+            writer.write("Ngày xuất: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + "\n");
+            
+            return true;
+        } catch (java.io.IOException e) {
+            System.err.println("Lỗi khi xuất file: " + e.getMessage());
+            return false;
+        }
+    }
+
     
 }
