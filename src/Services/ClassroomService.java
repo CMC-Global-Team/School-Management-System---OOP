@@ -18,4 +18,15 @@ public class ClassroomService {
         this.repository = new ClassroomRepository();
     }
     
+    /**
+     * Lấy instance duy nhất của ClassroomService (Singleton)
+     */
+    public static ClassroomService getInstance() {
+        if (instance == null) {
+            instance = new ClassroomService();
+        }
+        return instance;
+    }
+    
+
 }
