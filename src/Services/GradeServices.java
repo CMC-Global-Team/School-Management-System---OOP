@@ -28,4 +28,18 @@ public class GradeServices {
     public List<Grade> getAllGrade() {
         return repository.findAll();
     }
+
+    /**
+     * Lấy tất cả điểm theo mã học sinh
+     */
+    public List<Grade> getAllGradeByStudentID(String studentID) {
+        List<Grade> grades = getAllGrade();
+        List<Grade> studentGrades = getAllGrade();
+        for (Grade grade : grades) {
+            if(grade.getStudentId().equalsIgnoreCase(studentID)) {
+                studentGrades.add(grade);
+            }
+        }
+        return studentGrades;
+    }
 }
