@@ -69,5 +69,26 @@ public class AverageGradeScreen extends AbstractScreen{
         }
         return 0.0;
     }
-    
+    public static double getAvrScoreByStudentID(String studentID, List<String> gradeLines){
+        List<String> studentResults = SearchForStudentGradesScreen.findGradesByStudentID(gradeLines, studentID);
+        List<String> subjectResults;
+        double averageGrade = 0;
+        double coefficient = 0;
+        while(!studentResults.isEmpty()){
+            String firstLine = studentResults.get(0);
+            Grade g1 = Grade.fromString(firstLine);
+            double r;
+            if(g1 != null){
+                subjectResults = SearchForStudentGradesScreen.findGradesBySubjectID(studentResults, g1.getSubjectId());
+                if(!subjectResults.isEmpty()) {
+                    r = getAvrSubjectScoreBySubjectLines(subjectResults);
+                    averageGrade += r * getSubjectCoefficientsBySubjectID(g1.getSubjectId());
+                    coefficient += getSubjectCoefficientsBySubjectID(g1.getSubjectId());
+                }
+                studentResults = DeleteGradeScreen.ignoreSubjectID(g1.getSubjectId(), studentResults);
+            }
+        }
+        return averageGrade / coefficient;
+    }
+
 }
