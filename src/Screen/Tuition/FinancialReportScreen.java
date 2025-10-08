@@ -1,14 +1,11 @@
 package Screen.Tuition;
 
-import Models.Tuition;
 import Models.TuitionReport;
 import Screen.AbstractScreen;
 import Services.TuitionService;
 import Utils.InputUtil;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * FinancialReportScreen - Màn hình báo cáo tài chính học phí
