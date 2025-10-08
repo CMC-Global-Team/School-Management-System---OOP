@@ -1,20 +1,25 @@
 package Models;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class Teacher extends Person implements IEntity {
-    private String teacherSubject;
+    private List<String> teacherSubjects;
     private String teacherDegree;
     private int teacherExperience;
     private String teacherEmail;
     private String teacherPhone;
     private String teacherHomeroom;
 
-    public Teacher() {}
+    public Teacher() {
+        teacherSubjects = new ArrayList<>();
+    }
 
     public Teacher(String id, String name, String status,
-                   String teacherSubject, String teacherDegree, int teacherExperience,
+                   List<String> teacherSubjects, String teacherDegree, int teacherExperience,
                    String teacherEmail, String teacherPhone, String teacherHomeroom) {
         super(id, name, status);
-        this.teacherSubject = teacherSubject;
+        this.teacherSubjects = teacherSubjects != null ? teacherSubjects : new ArrayList<>();
         this.teacherDegree = teacherDegree;
         this.teacherExperience = teacherExperience;
         this.teacherEmail = teacherEmail;
@@ -23,8 +28,10 @@ public class Teacher extends Person implements IEntity {
     }
 
     // Getter & Setter
-    public String getTeacherSubject() { return teacherSubject; }
-    public void setTeacherSubject(String teacherSubject) { this.teacherSubject = teacherSubject; }
+    public List<String> getTeacherSubjects() { return teacherSubjects; }
+    public void setTeacherSubjects(List<String> teacherSubjects) {
+        this.teacherSubjects = teacherSubjects != null ? teacherSubjects : new ArrayList<>();
+    }
 
     public String getTeacherDegree() { return teacherDegree; }
     public void setTeacherDegree(String teacherDegree) { this.teacherDegree = teacherDegree; }
@@ -42,39 +49,37 @@ public class Teacher extends Person implements IEntity {
     public void setTeacherHomeroom(String teacherHomeroom) { this.teacherHomeroom = teacherHomeroom; }
 
     @Override
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
 
-    // Xuất ra File
+    // Xuất ra file
     @Override
-    public String toString() {
-        return id + "," + name + "," + teacherSubject + "," + teacherDegree + "," +
-                teacherExperience + "," + teacherEmail + "," + teacherPhone + "," +
-                teacherHomeroom + "," + status;
+    public String toFileString() {
+        String subjects = String.join("|", teacherSubjects);
+        return id + "," + name + "," + subjects + "," + teacherDegree + "," + teacherExperience + "," +
+                teacherEmail + "," + teacherPhone + "," + teacherHomeroom + "," + status;
     }
-
-    // Phân tích từ file về Object
     public static Teacher fromString(String line) {
-        String[] parts = line.split(",");
+        String[] parts = line.split(",", 9);
         if (parts.length != 9) return null;
         try {
+            String subjectStr = parts[2];
+            List<String> subjects = subjectStr.isEmpty() ? new ArrayList<>() :
+                    Arrays.stream(subjectStr.split("\\|")) // dùng | để phân tách nhiều môn
+                            .map(String::trim)
+                            .collect(Collectors.toList());
             int exp = 0;
-            try{
-                exp = Integer.parseInt(parts[4]);
-            } catch(NumberFormatException e) {
-                exp = 0;
-            }
+            try { exp = Integer.parseInt(parts[4]); } catch (NumberFormatException e) { exp = 0; }
+
             return new Teacher(
-                    parts[0], // Teacher's ID
-                    parts[1], // Teacher's Name
-                    parts[8], // Teacher's Status
-                    parts[2], // Teacher's Subject
-                    parts[3], // Teacher's degree
-                    exp, // Teacher's experience
-                    parts[5], // Teacher's email
-                    parts[6], // Teacher's phone
-                    parts[7]  // Teacher's homeroom
+                    parts[0],  // id
+                    parts[1],  // name
+                    parts[8],  // status
+                    subjects,  // teacherSubjects
+                    parts[3],  // degree
+                    exp,       // experience
+                    parts[5],  // email
+                    parts[6],  // phone
+                    parts[7]   // homeroom
             );
         } catch (Exception e) {
             return null;
@@ -82,15 +87,24 @@ public class Teacher extends Person implements IEntity {
     }
 
     @Override
-    public String toFileString() {
-        return id + "," + name + "," + teacherSubject + "," + teacherDegree + "," + teacherExperience + "," +
-                teacherEmail + "," + teacherPhone + "," + teacherHomeroom + "," + status;
+    public String toString() {
+        String subjects = "[" + String.join(",", teacherSubjects) + "]";
+        return "Teacher{" +
+                "ID='" + id + '\'' +
+                ", Name='" + name + '\'' +
+                ", Subjects=[" + subjects + "]" +
+                ", Degree='" + teacherDegree + '\'' +
+                ", Experience=" + teacherExperience +
+                ", Email='" + teacherEmail + '\'' +
+                ", Phone='" + teacherPhone + '\'' +
+                ", Homeroom='" + teacherHomeroom + '\'' +
+                ", Status='" + status + '\'' +
+                '}';
     }
 
     @Override
     public boolean validate() {
-        if (id == null || id.trim().isEmpty()) return false;
-        if (name == null || name.trim().isEmpty()) return false;
-        return true;
+        return id != null && !id.trim().isEmpty()
+                && name != null && !name.trim().isEmpty();
     }
 }
