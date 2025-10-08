@@ -61,5 +61,26 @@ public class SearchForStudentGradesScreen extends AbstractScreen {
         }
         return results;
     }
+
+     public static void displayResults(List<String> results){
+        if(!results.isEmpty()) {
+            for (String line : results) {
+                Grade g = Grade.fromString(line);
+                if(g != null) {
+                    System.out.printf("%10s %10s %10s %10s %10s %10s %5s %20s%n",
+                            "Mã điểm", "Mã học sinh", "Mã môn", "Loại điểm", "Diểm", "Năm học", "Kỳ học", "Ghi chú");
+
+                    // Print separator
+                    System.out.println("-".repeat(10 + 1 + 10 + 1 + 10 + 1 + 10 + 1 + 10 + 1 + 10 + 1 + 5 + 1 + 20));
+                    System.out.printf("%10s %10s %10s %10s %10.2f %10s %5d %20s%n",
+                            g.getGradeId(), g.getStudentId(), g.getSubjectId(), g.getGradeType(),
+                            g.getScore(), g.getSchoolYear(), g.getSemester(), g.getNote());
+                }
+            }
+            results.clear();
+        }else {
+            System.out.println("Không tìm thấy thông tin!");
+        }
+    }
     
 }
