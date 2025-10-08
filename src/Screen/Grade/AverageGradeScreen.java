@@ -90,5 +90,21 @@ public class AverageGradeScreen extends AbstractScreen{
         }
         return averageGrade / coefficient;
     }
+    public static double getAvrSubjectScoreBySubjectLines(List<String> subjectLines){
+        double r = 0;
+        for (String line : subjectLines) {
+            Grade g2 = Grade.fromString(line);
+            if (g2 != null && g2.getGradeType().equalsIgnoreCase("thuong xuyen")) {
+                r += g2.getScore() * 20;
+            }
+            if (g2 != null && g2.getGradeType().equalsIgnoreCase("giua ky")) {
+                r += g2.getScore() * 30;
+            }
+            if (g2 != null && g2.getGradeType().equalsIgnoreCase("cuoi ky")) {
+                r += g2.getScore() * 50;
+            }
+        }
 
+        return r / 100;
+    }
 }
