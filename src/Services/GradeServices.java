@@ -42,4 +42,18 @@ public class GradeServices {
         }
         return studentGrades;
     }
+
+    /**
+     * Lấy tất cả điểm theo mã môn học
+     */
+    public List<Grade> getAllGradeBySubjectID(String subjectID, String studentID) {
+        List<Grade> grades = getAllGradeByStudentID(studentID);
+        List<Grade> subjectGrades = getAllGrade();
+        for (Grade grade : grades) {
+            if(grade.getSubjectId().equalsIgnoreCase(subjectID)) {
+                subjectGrades.add(grade);
+            }
+        }
+        return subjectGrades;
+    }
 }
