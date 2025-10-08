@@ -1,9 +1,12 @@
 package Screen.Teacher;
 
+import Models.Classroom;
 import Models.Subject;
 import Screen.AbstractScreen;
+import Services.FileManager;
 import Services.SubjectService;
 import Services.TeacherService;
+import Utils.FileUtil;
 import Utils.InputUtil;
 import java.util.*;
 
@@ -116,7 +119,47 @@ public class AddTeacherScreen extends AbstractScreen {
         int experience = InputUtil.getInt("Số năm kinh nghiệm: ");
         String email = InputUtil.getEmail("Email: ");
         String phone = InputUtil.getPhoneNumber("Số điện thoại: ");
-        String homeroom = InputUtil.getString("Lớp chủ nhiệm (Enter nếu chưa có): ");
+        
+        // --- Lớp chủ nhiệm với danh sách lớp ---
+        System.out.println("\nLỚP CHỦ NHIỆM:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           DANH SÁCH LỚP HỌC                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-8s %-20s %-15s %-20s │%n", "Mã lớp", "Tên lớp", "Năm học", "Niên khóa");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        
+        List<Classroom> classrooms = new ArrayList<>();
+        try {
+            if (FileUtil.fileExists(FileManager.CLASSROOM_FILE)) {
+                List<String> classroomLines = FileUtil.readLines(FileManager.CLASSROOM_FILE);
+                for (String line : classroomLines) {
+                    Classroom c = Classroom.fromString(line);
+                    if (c != null) classrooms.add(c);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi đọc danh sách lớp: " + e.getMessage());
+        }
+
+        if (!classrooms.isEmpty()) {
+            for (int i = 0; i < classrooms.size(); i++) {
+                Classroom c = classrooms.get(i);
+                System.out.printf("│ %-8s %-20s %-15s %-20s │%n", 
+                    c.getClassId(), c.getClassName(), c.getSchoolYear(), c.getCourse());
+            }
+            System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+            
+            System.out.println("\nBạn có thể:");
+            System.out.println("1. Nhập mã lớp từ danh sách trên (VD: L01A1)");
+            System.out.println("2. Nhập tên lớp mới nếu chưa có trong danh sách");
+            System.out.println("3. Để trống nếu chưa có lớp chủ nhiệm");
+        } else {
+            System.out.println("│ Chưa có lớp học nào trong hệ thống!                                    │");
+            System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+            System.out.println("Bạn có thể nhập tên lớp mới hoặc để trống.");
+        }
+        
+        String homeroom = InputUtil.getString("\nLớp chủ nhiệm (Enter nếu chưa có): ");
 
         // --- Trạng thái ---
         int statusCode = -1;

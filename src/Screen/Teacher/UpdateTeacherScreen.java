@@ -1,9 +1,13 @@
 package Screen.Teacher;
 
+import Models.Classroom;
 import Models.Teacher;
 import Screen.AbstractScreen;
+import Services.FileManager;
 import Services.TeacherService;
+import Utils.FileUtil;
 import Utils.InputUtil;
+import java.util.ArrayList;
 import java.util.Collections;
 
 /**
@@ -99,7 +103,49 @@ public class UpdateTeacherScreen extends AbstractScreen {
         String phone = InputUtil.getString("SĐT (" + existing.getTeacherPhone() + "): ");
         if (!phone.isEmpty()) existing.setTeacherPhone(phone);
 
-        String homeroom = InputUtil.getString("Lớp CN (" + existing.getTeacherHomeroom() + "): ");
+        // --- Cập nhật lớp chủ nhiệm với danh sách lớp ---
+        System.out.println("\nCẬP NHẬT LỚP CHỦ NHIỆM:");
+        System.out.println("Lớp hiện tại: " + (existing.getTeacherHomeroom() == null || existing.getTeacherHomeroom().isEmpty() ? "Chưa có" : existing.getTeacherHomeroom()));
+        
+        System.out.println("\nDANH SÁCH LỚP CÓ SẴN:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           DANH SÁCH LỚP HỌC                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-8s %-20s %-15s %-20s │%n", "Mã lớp", "Tên lớp", "Năm học", "Niên khóa");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        
+        List<Classroom> classrooms = new ArrayList<>();
+        try {
+            if (FileUtil.fileExists(FileManager.CLASSROOM_FILE)) {
+                List<String> classroomLines = FileUtil.readLines(FileManager.CLASSROOM_FILE);
+                for (String line : classroomLines) {
+                    Classroom c = Classroom.fromString(line);
+                    if (c != null) classrooms.add(c);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi đọc danh sách lớp: " + e.getMessage());
+        }
+
+        if (!classrooms.isEmpty()) {
+            for (int i = 0; i < classrooms.size(); i++) {
+                Classroom c = classrooms.get(i);
+                System.out.printf("│ %-8s %-20s %-15s %-20s │%n", 
+                    c.getClassId(), c.getClassName(), c.getSchoolYear(), c.getCourse());
+            }
+            System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+            
+            System.out.println("\nBạn có thể:");
+            System.out.println("1. Nhập mã lớp từ danh sách trên (VD: L01A1)");
+            System.out.println("2. Nhập tên lớp mới nếu chưa có trong danh sách");
+            System.out.println("3. Để trống nếu không thay đổi");
+        } else {
+            System.out.println("│ Chưa có lớp học nào trong hệ thống!                                    │");
+            System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+            System.out.println("Bạn có thể nhập tên lớp mới hoặc để trống.");
+        }
+        
+        String homeroom = InputUtil.getString("\nLớp chủ nhiệm mới (Enter nếu không thay đổi): ");
         if (!homeroom.isEmpty()) existing.setTeacherHomeroom(homeroom);
 
 
