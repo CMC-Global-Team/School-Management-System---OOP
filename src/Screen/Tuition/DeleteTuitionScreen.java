@@ -23,6 +23,7 @@ public class DeleteTuitionScreen extends AbstractScreen {
 
     @Override
     public void handleInput() {
+        String tuitionId = InputUtil.getNonEmptyString("Nhập mã học phí cần xóa (ví dụ: TF0001): ");
 
     }
 }
