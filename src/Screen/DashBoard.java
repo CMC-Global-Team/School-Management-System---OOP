@@ -27,17 +27,17 @@ public class DashBoard extends AbstractScreen {
 
     @Override
     public void display() {
-        System.out.println("===========================================");
-        System.out.println("     HE THONG QUAN LY TRUONG HOC");
-        System.out.println("===========================================");
-        System.out.println("  1. Quan Ly Lop Hoc");
-        System.out.println("  2. Quan Ly Mon Hoc");
-        System.out.println("  3. Quan Ly Diem");
-        System.out.println("  4. Quan Ly Hoc Sinh");
-        System.out.println("  5. Quan Ly Giao Vien");
-        System.out.println("  6. Quan Ly Hoc Phi");
-        System.out.println("  0. Thoat Chuong Trinh");
-        System.out.println("===========================================");
+        System.out.println("┌──────────────────────────────────────────┐");
+        System.out.println("│        HỆ THỐNG QUẢN LÝ TRƯỜNG HỌC        │");
+        System.out.println("├──────────────────────────────────────────┤");
+        System.out.println("│  1. Quản Lý Lớp Học                       │");
+        System.out.println("│  2. Quản Lý Môn Học                       │");
+        System.out.println("│  3. Quản Lý Điểm                          │");
+        System.out.println("│  4. Quản Lý Học Sinh                      │");
+        System.out.println("│  5. Quản Lý Giáo Viên                     │");
+        System.out.println("│  6. Quản Lý Học Phí                       │");
+        System.out.println("│  0. Thoát Chương Trình                    │");
+        System.out.println("└──────────────────────────────────────────┘");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DashBoard extends AbstractScreen {
         while (running) {
             clearScreen();
             display();
-            int choice = inputInt("Nhap lua chon cua ban: ");
+            int choice = inputInt("Nhập lựa chọn của bạn: ");
 
             switch (choice) {
                 case 1:
@@ -68,11 +68,11 @@ public class DashBoard extends AbstractScreen {
                     menuTuition.handleInput();
                     break;
                 case 0:
-                    System.out.println("\nCam on ban da su dung he thong. Tam biet!");
+                    System.out.println("\nCảm ơn bạn đã sử dụng hệ thống. Tạm biệt!");
                     running = false;
                     break;
                 default:
-                    System.out.println("\nLua chon khong hop le. Vui long chon tu 0-6.");
+                    System.out.println("\nLựa chọn không hợp lệ. Vui lòng chọn từ 0-6.");
                     pause();
             }
         }
