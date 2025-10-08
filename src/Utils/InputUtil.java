@@ -51,5 +51,15 @@ public class InputUtil {
         }
     }
 
-    
+    public static double getDouble(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Vui lòng nhập một số thực hợp lệ!");
+            }
+        }
+    }
+
 }
