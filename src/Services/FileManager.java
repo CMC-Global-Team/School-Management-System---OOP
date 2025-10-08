@@ -78,4 +78,21 @@ public class FileManager {
         }
     }
     
+    /**
+     * Xóa tất cả dữ liệu (dùng cho testing hoặc reset)
+     */
+    public static void clearAllData() {
+        File dataDir = new File(DATA_DIR);
+        if (dataDir.exists() && dataDir.isDirectory()) {
+            File[] files = dataDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        file.delete();
+                    }
+                }
+            }
+        }
+        System.out.println("Đã xóa tất cả dữ liệu trong thư mục data");
+    }
 }
