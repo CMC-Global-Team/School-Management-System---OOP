@@ -466,4 +466,41 @@ public class TuitionService {
         return report;
     }
 
+    /**
+     * Áp dụng miễn giảm học phí theo phần trăm
+     * @param tuitionId Mã học phí cần miễn giảm
+     * @param percent Phần trăm miễn giảm (0-100)
+     * @return true nếu cập nhật thành công, false nếu thất bại
+     */
+    public boolean applyDiscount(String tuitionId, double percent) {
+        if (percent < 0 || percent > 100) {
+            System.out.println(" Mức miễn giảm phải trong khoảng 0 - 100!");
+            return false;
+        }
+
+        Optional<Tuition> optionalTuition = repository.findById(tuitionId);
+        if (optionalTuition.isEmpty()) {
+            System.out.println(" Không tìm thấy học phí với mã '" + tuitionId + "'!");
+            return false;
+        }
+
+        Tuition t = optionalTuition.get();
+
+        // Tính số tiền sau khi miễn giảm
+        double discountAmount = t.getAmount() * (percent / 100);
+        double newAmount = t.getAmount() - discountAmount;
+
+        t.setAmount(newAmount);
+        t.setNote("Được miễn giảm " + percent + "% học phí");
+
+        if (repository.update(t)) {
+            System.out.println("Đã áp dụng miễn giảm học phí thành công!");
+            System.out.println("Số tiền sau khi miễn giảm: " + String.format("%,.0f", newAmount) + " VND");
+            return true;
+        } else {
+            System.out.println("Áp dụng miễn giảm thất bại!");
+            return false;
+        }
+    }
+
 }
