@@ -1,5 +1,9 @@
 package Services;
 
+import Models.Grade;
+
+import java.util.List;
+
 public class GradeServices {
     private static GradeServices instance;
     private final GradeRepository repository;
@@ -16,5 +20,12 @@ public class GradeServices {
             instance = new GradeServices();
         }
         return instance;
+    }
+
+    /**
+     * Tìm điểm theo mã học sinh
+     */
+    public List<Grade> getAllGrade() {
+        return repository.findAll();
     }
 }
