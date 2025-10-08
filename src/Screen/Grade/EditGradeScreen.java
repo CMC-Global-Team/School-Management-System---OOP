@@ -1,19 +1,12 @@
 package Screen.Grade;
 
-import Models.Classroom;
 import Models.Grade;
 import Screen.AbstractScreen;
 import Services.GradeServices;
-import Utils.FileUtil;
 import Utils.InputUtil;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class EditGradeScreen extends AbstractScreen {
-    private boolean updated;
     @Override
     public void display() {
         System.out.println("┌──────────────────────────────────────────┐");
@@ -133,22 +126,20 @@ public class EditGradeScreen extends AbstractScreen {
     private void updateScore(Grade grade) {
         double score = InputUtil.getInt("Điểm: ");
         grade.setScore(score);
-        updated = true;
     }
 
     private void updateSemester(Grade grade) {
         int Semester = inputInt("Học kỳ: ");
         if (Semester != 0) {
             grade.setSemester(Semester);
-            updated = true;
         }
     }
 
     private void updateSchoolYear(Grade grade) {
+        GradeServices.getInstance();
         String schoolYear = GradeServices.schoolYearInput();
         if(!schoolYear.isEmpty()){
             grade.setSchoolYear(schoolYear);
-            updated = true;
         }
     }
 
@@ -156,7 +147,6 @@ public class EditGradeScreen extends AbstractScreen {
         String note = InputUtil.getString("Ghi chú: ");
         if(!note.isEmpty()){
             grade.setNote(note);
-            updated = true;
         }
     }
 
