@@ -119,7 +119,7 @@ public class SubjectService {
 
     public boolean updateSubject(Subject subject) {
         if (subject == null) {
-            System.out.println("Lỗi: Subject không được null!");
+            System.out.println("Lỗi: Screen.Subject không được null!");
             return false;
         }
 
