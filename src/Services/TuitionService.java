@@ -3,6 +3,9 @@ package Services;
 import Models.Tuition;
 import Utils.InputUtil;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -398,4 +401,23 @@ public class TuitionService {
         System.out.println("└───────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
         System.out.println("Tìm thấy: " + results.size() + " học phí");
     }
+
+    // Xuất danh sách học phí ra file
+    public boolean exportTuitionsToFile(String filePath) {
+        List<Tuition> tuitions = getAllTuitions();
+        if (tuitions.isEmpty()) return false;
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+            for (Tuition t : tuitions) {
+                bw.write(t.toFileString()); // phương thức này đã có trong model
+                bw.newLine();
+            }
+            return true;
+        } catch (IOException e) {
+            System.out.println("[Lỗi] Không ghi được file: " + e.getMessage());
+            return false;
+        }
+    }
+
+
 }
