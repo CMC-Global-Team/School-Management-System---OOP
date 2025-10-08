@@ -267,7 +267,7 @@ public class TeacherService {
             bw.newLine();
             
             // Ghi tiêu đề cột
-            bw.write("Mã GV\tTên\tGiới tính\tNgày sinh\tĐịa chỉ\tSĐT\tEmail\tMôn dạy\tLớp CN");
+            bw.write("Mã GV\tTên\tTrạng thái\tBằng cấp\tKinh nghiệm\tSĐT\tEmail\tMôn dạy\tLớp CN");
             bw.newLine();
             bw.write("=".repeat(100));
             bw.newLine();
@@ -276,16 +276,15 @@ public class TeacherService {
             for (Teacher teacher : teachers) {
                 String subjects = teacher.getTeacherSubjects().isEmpty() ? "Chưa có" : String.join(", ", teacher.getTeacherSubjects());
                 String homeroom = (teacher.getTeacherHomeroom() == null || teacher.getTeacherHomeroom().isEmpty()) ? "Chưa có" : teacher.getTeacherHomeroom();
-                String birthDate = teacher.getBirthDate() != null ? teacher.getBirthDate().toString() : "N/A";
                 
-                bw.write(String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+                bw.write(String.format("%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s",
                     teacher.getId(),
                     teacher.getName(),
-                    teacher.getGender(),
-                    birthDate,
-                    teacher.getAddress(),
-                    teacher.getPhoneNumber(),
-                    teacher.getEmail(),
+                    teacher.getStatus(),
+                    teacher.getTeacherDegree(),
+                    teacher.getTeacherExperience(),
+                    teacher.getTeacherPhone(),
+                    teacher.getTeacherEmail(),
                     subjects,
                     homeroom
                 ));

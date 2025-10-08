@@ -10,6 +10,7 @@ public class MenuTeacherScreen extends AbstractScreen {
     private final ListTeacherScreen listScreen;
     private final AssignTeacherScreen assignTeacherScreen;
     private final AssignHomeroomScreen assignHomeroomScreen;
+    private final ExportTeacherScreen exportTeacherScreen;
 
     public MenuTeacherScreen() {
         super();
@@ -20,6 +21,7 @@ public class MenuTeacherScreen extends AbstractScreen {
         this.listScreen = new ListTeacherScreen();
         this.assignTeacherScreen = new AssignTeacherScreen();
         this.assignHomeroomScreen = new AssignHomeroomScreen();
+        this.exportTeacherScreen = new ExportTeacherScreen();
 
 
     }
@@ -36,6 +38,7 @@ public class MenuTeacherScreen extends AbstractScreen {
         System.out.println("│  5. Danh Sách Tất Cả Giáo Viên           │");
         System.out.println("│  6. Phân Công Giảng Dạy                  │");
         System.out.println("│  7. Gán Lớp Chủ Nhiệm                    │");
+        System.out.println("│  8. Xuất Danh Sách Giáo Viên             │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
         
@@ -50,6 +53,7 @@ public class MenuTeacherScreen extends AbstractScreen {
         System.out.println("│ 5. Danh sách giáo viên - Xem tất cả giáo viên trong hệ thống           │");
         System.out.println("│ 6. Phân công giảng dạy - Gán môn học cho giáo viên                    │");
         System.out.println("│ 7. Gán lớp chủ nhiệm - Chỉ định giáo viên làm chủ nhiệm lớp           │");
+        System.out.println("│ 8. Xuất danh sách - Xuất danh sách giáo viên ra file                   │");
         System.out.println("│ 0. Quay lại menu chính                                                  │");
         System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
@@ -94,6 +98,10 @@ public class MenuTeacherScreen extends AbstractScreen {
                     assignHomeroomScreen.display();
                     assignHomeroomScreen.handleInput();
                     pause();
+                    break;
+                case 8:
+                    exportTeacherScreen.display();
+                    exportTeacherScreen.handleInput();
                     break;
                 case 0:
                     System.out.println("\nDang quay lai menu chinh...");
