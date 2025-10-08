@@ -150,16 +150,20 @@ public class AddTeacherScreen extends AbstractScreen {
             System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
             
             System.out.println("\nBạn có thể:");
-            System.out.println("1. Nhập mã lớp từ danh sách trên (VD: L01A1)");
+            System.out.println("1. Nhập mã lớp từ danh sách trên (VD: L01A1) - sẽ tự động chuyển thành tên lớp");
             System.out.println("2. Nhập tên lớp mới nếu chưa có trong danh sách");
             System.out.println("3. Để trống nếu chưa có lớp chủ nhiệm");
+            System.out.println("\nLƯU Ý: Hệ thống sẽ tự động chuyển mã lớp thành tên lớp để đảm bảo tính nhất quán!");
         } else {
             System.out.println("│ Chưa có lớp học nào trong hệ thống!                                    │");
             System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
             System.out.println("Bạn có thể nhập tên lớp mới hoặc để trống.");
         }
         
-        String homeroom = InputUtil.getString("\nLớp chủ nhiệm (Enter nếu chưa có): ");
+        String homeroomInput = InputUtil.getString("\nLớp chủ nhiệm (Enter nếu chưa có): ");
+        
+        // Chuyển đổi mã lớp thành tên lớp để đảm bảo tính nhất quán
+        String homeroom = convertToClassName(homeroomInput, classrooms);
 
         // --- Trạng thái ---
         int statusCode = -1;
@@ -190,5 +194,29 @@ public class AddTeacherScreen extends AbstractScreen {
         }
 
         InputUtil.pressEnterToContinue();
+    }
+    
+    /**
+     * Chuyển đổi mã lớp thành tên lớp để đảm bảo tính nhất quán dữ liệu
+     * @param input Mã lớp hoặc tên lớp người dùng nhập
+     * @param classrooms Danh sách lớp có sẵn
+     * @return Tên lớp chuẩn hóa
+     */
+    private String convertToClassName(String input, List<Classroom> classrooms) {
+        if (input == null || input.trim().isEmpty()) {
+            return "";
+        }
+        
+        input = input.trim();
+        
+        // Tìm trong danh sách lớp xem có trùng mã lớp không
+        for (Classroom classroom : classrooms) {
+            if (classroom.getClassId().equalsIgnoreCase(input)) {
+                return classroom.getClassName(); // Trả về tên lớp thay vì mã lớp
+            }
+        }
+        
+        // Nếu không tìm thấy mã lớp, coi như là tên lớp và trả về nguyên văn
+        return input;
     }
 }
