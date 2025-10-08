@@ -10,6 +10,7 @@ public class StudentMenu extends AbstractScreen {
     private final ListStudentScreen listScreen;
     private final FilterStudentScreen filterScreen;
     private final ExportStudentScreen exportScreen;
+    private final TransferStudentScreen transferScreen;
 
     public StudentMenu() {
         super();
@@ -20,6 +21,7 @@ public class StudentMenu extends AbstractScreen {
         this.listScreen = new ListStudentScreen();
         this.filterScreen = new FilterStudentScreen();
         this.exportScreen = new ExportStudentScreen();
+        this.transferScreen = new TransferStudentScreen();
     }
 
     @Override
@@ -34,6 +36,7 @@ public class StudentMenu extends AbstractScreen {
         System.out.println("│  5. Danh Sách Tất Cả Học Sinh            │");
         System.out.println("│  6. Lọc Học Sinh                         │");
         System.out.println("│  7. Xuất Danh Sách Học Sinh              │");
+        System.out.println("│  8. Chuyển Lớp Học Sinh                  │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
     }
@@ -45,7 +48,7 @@ public class StudentMenu extends AbstractScreen {
         while (running) {
             clearScreen();
             display();
-            int choice = inputInt("Nhap lua chon cua ban: ");
+            int choice = inputInt("Nhập lựa chọn của bạn: ");
 
             switch (choice) {
                 case 1:
@@ -76,12 +79,16 @@ public class StudentMenu extends AbstractScreen {
                     exportScreen.display();
                     exportScreen.handleInput();
                     break;
+                case 8:
+                    transferScreen.display();
+                    transferScreen.handleInput();
+                    break;
                 case 0:
-                    System.out.println("\nDang quay lai menu chinh...");
+                    System.out.println("\nĐang quay lại menu chính...");
                     running = false;
                     break;
                 default:
-                    System.out.println("\nLua chon khong hop le. Vui long thu lai.");
+                    System.out.println("\nLựa chọn không hợp lệ. Vui lòng thử lại.");
                     pause();
             }
         }
