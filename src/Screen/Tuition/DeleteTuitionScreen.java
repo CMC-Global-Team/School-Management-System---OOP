@@ -17,11 +17,18 @@ public class DeleteTuitionScreen extends AbstractScreen {
         System.out.println("│         XÓA THÔNG TIN HỌC PHÍ            │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\nHƯỚNG DẪN SỬ DỤNG:");
-        System.out.println("- Nhập mã học phí cần xóa");
-        System.out.println("- Hệ thống sẽ hiển thị thông tin học phí trước khi xóa");
-        System.out.println("- Xác nhận trước khi thực hiện xóa");
-        System.out.println("- Thao tác này không thể hoàn tác");
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN CẦN NHẬP                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Mã học phí: TFxxxx (VD: TF0001) - Phải tồn tại trong hệ thống          │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ CẢNH BÁO QUAN TRỌNG:                                                │");
+        System.out.println("│ - Hệ thống sẽ hiển thị thông tin học phí trước khi xóa                  │");
+        System.out.println("│ - Bạn phải xác nhận trước khi thực hiện xóa                             │");
+        System.out.println("│ - Thao tác này KHÔNG THỂ HOÀN TÁC                                       │");
+        System.out.println("│ - Hãy kiểm tra kỹ thông tin trước khi xác nhận                          │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

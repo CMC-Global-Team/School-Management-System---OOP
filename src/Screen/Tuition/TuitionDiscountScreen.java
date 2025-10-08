@@ -17,11 +17,20 @@ public class TuitionDiscountScreen extends AbstractScreen {
         System.out.println("│         MIỄN GIẢM HỌC PHÍ                  │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\nHƯỚNG DẪN SỬ DỤNG:");
-        System.out.println("- Nhập mã học phí cần miễn giảm");
-        System.out.println("- Nhập phần trăm miễn giảm (0-100%)");
-        System.out.println("- Hệ thống sẽ tự động tính số tiền sau giảm");
-        System.out.println("- Cập nhật ghi chú với thông tin miễn giảm");
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN CẦN NHẬP                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Mã học phí: TFxxxx (VD: TF0001) - Phải tồn tại trong hệ thống          │");
+        System.out.println("│ Phần trăm miễn giảm: 0-100 (VD: 10 = 10%, 50 = 50%)                   │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ QUY TRÌNH MIỄN GIẢM:                                                   │");
+        System.out.println("│ 1. Nhập mã học phí cần miễn giảm                                       │");
+        System.out.println("│ 2. Hệ thống hiển thị thông tin học phí hiện tại                         │");
+        System.out.println("│ 3. Nhập phần trăm miễn giảm (0-100%)                                   │");
+        System.out.println("│ 4. Xác nhận thông tin miễn giảm                                        │");
+        System.out.println("│ 5. Hệ thống cập nhật số tiền và ghi chú                                │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

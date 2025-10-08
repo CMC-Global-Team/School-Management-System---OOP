@@ -29,13 +29,13 @@ public class MenuTuition extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────┐");
         System.out.println("│        HỆ THỐNG QUẢN LÝ HỌC PHÍ          │");
         System.out.println("├──────────────────────────────────────────┤");
-        System.out.println("│  1. Ghi nhận thanh toán học phí          │");
-        System.out.println("│  2. Sửa thông tin học phí                │");
-        System.out.println("│  3. Xóa dữ liệu học phí                  │");
-        System.out.println("│  4. Tra cứu học phí                      │");
-        System.out.println("│  5. Miễn giảm học phí                    │");
-        System.out.println("│  6. Báo cáo tài chính                    │");
-        System.out.println("│  7. Xuất danh sách học phí               │");
+        System.out.println("│  1. Ghi Nhận Thanh Toán Học Phí          │");
+        System.out.println("│  2. Sửa Thông Tin Học Phí                │");
+        System.out.println("│  3. Xóa Dữ Liệu Học Phí                  │");
+        System.out.println("│  4. Tra Cứu Học Phí                      │");
+        System.out.println("│  5. Miễn Giảm Học Phí                    │");
+        System.out.println("│  6. Báo Cáo Tài Chính                    │");
+        System.out.println("│  7. Xuất Danh Sách Học Phí               │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
     }

@@ -21,11 +21,21 @@ public class ExportTuitionListScreen extends AbstractScreen {
         System.out.println("│        XUẤT DANH SÁCH HỌC PHÍ            │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\nHƯỚNG DẪN XUẤT:");
-        System.out.println("- File sẽ được lưu trong thư mục data/");
-        System.out.println("- Tên file tự động với timestamp");
-        System.out.println("- Có thể xuất theo nhiều tiêu chí khác nhau");
-        System.out.println("- File xuất có định dạng CSV dễ đọc");
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           TÙY CHỌN XUẤT                                 │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ 1. Xuất tất cả học phí: Toàn bộ dữ liệu học phí                         │");
+        System.out.println("│ 2. Xuất theo năm học: Lọc theo năm học cụ thể                             │");
+        System.out.println("│ 3. Xuất theo trạng thái: Lọc theo đã thu/chưa thu                        │");
+        System.out.println("│ 4. Xuất theo học sinh: Lọc theo mã học sinh cụ thể                       │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ THÔNG TIN FILE XUẤT:                                                     │");
+        System.out.println("│ - Đường dẫn: thư mục data/                                              │");
+        System.out.println("│ - Tên file: tự động với timestamp                                        │");
+        System.out.println("│ - Định dạng: CSV dễ đọc                                                  │");
+        System.out.println("│ - Nội dung: đầy đủ thông tin học phí                                    │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

@@ -18,13 +18,20 @@ public class SearchForTuition extends AbstractScreen {
         System.out.println("│         TRA CỨU THÔNG TIN HỌC PHÍ        │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\nHƯỚNG DẪN TÌM KIẾM:");
-        System.out.println("- Tìm theo mã học phí: TF0001");
-        System.out.println("- Tìm theo mã học sinh: BS2");
-        System.out.println("- Tìm theo năm học: 2024-2025");
-        System.out.println("- Tìm theo trạng thái: đã thu, chưa thu");
-        System.out.println("- Tìm theo phương thức: tiền mặt, chuyển khoản");
-        System.out.println("- Để trống để xem tất cả học phí");
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           CÁCH TÌM KIẾM                                 │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Tìm theo mã học phí: TF0001, TF0002...                                  │");
+        System.out.println("│ Tìm theo mã học sinh: BS2, BS3...                                       │");
+        System.out.println("│ Tìm theo năm học: 2024-2025, 2023-2024...                               │");
+        System.out.println("│ Tìm theo trạng thái: đã thu, chưa thu                                   │");
+        System.out.println("│ Tìm theo phương thức: tiền mặt, chuyển khoản                            │");
+        System.out.println("│ Tìm theo từ khóa: bất kỳ từ nào trong ghi chú                           │");
+        System.out.println("│ Để trống: hiển thị tất cả học phí                                      │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ LƯU Ý: Tìm kiếm không phân biệt hoa thường                              │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

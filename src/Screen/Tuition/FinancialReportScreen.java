@@ -18,11 +18,20 @@ public class FinancialReportScreen extends AbstractScreen {
         System.out.println("│         BÁO CÁO TÀI CHÍNH                 │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\nHƯỚNG DẪN SỬ DỤNG:");
-        System.out.println("- Nhập năm học để lọc báo cáo (VD: 2024-2025)");
-        System.out.println("- Để trống để xem báo cáo tất cả năm học");
-        System.out.println("- Báo cáo bao gồm: tổng thu, chưa thu, miễn giảm");
-        System.out.println("- Hiển thị thống kê chi tiết theo trạng thái");
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN CẦN NHẬP                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Năm học lọc: YYYY-YYYY (VD: 2024-2025) - Để trống để xem tất cả        │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ NỘI DUNG BÁO CÁO:                                                        │");
+        System.out.println("│ - Tổng quan tài chính (doanh thu dự kiến, thực tế, miễn giảm)          │");
+        System.out.println("│ - Thống kê tỷ lệ (thu được, miễn giảm, chưa thu)                        │");
+        System.out.println("│ - Phân tích chi tiết từng loại học phí                                  │");
+        System.out.println("│ - Đánh giá tình hình thu học phí                                         │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ LƯU Ý: Báo cáo được tính toán dựa trên dữ liệu hiện tại                 │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override
