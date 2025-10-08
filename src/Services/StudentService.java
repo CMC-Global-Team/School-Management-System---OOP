@@ -219,5 +219,14 @@ public class StudentService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    
+    /**
+     * Lọc học sinh theo trạng thái
+     */
+    public List<Student> filterByStatus(String status) {
+        return repository.findAll().stream()
+                .filter(student -> student.getStatus().equalsIgnoreCase(status))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+
 }
