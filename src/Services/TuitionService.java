@@ -209,7 +209,8 @@ public class TuitionService {
         if (semesterInput != null && !semesterInput.isEmpty()) {
             try {
                 t.setSemester(Integer.parseInt(semesterInput));
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         // SchoolYear
@@ -240,7 +241,8 @@ public class TuitionService {
             try {
                 double money = Double.parseDouble(amountInput);
                 if (money >= 0) t.setAmount(money);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
 
         // PaymentDate
@@ -248,7 +250,8 @@ public class TuitionService {
             try {
                 LocalDate newDate = LocalDate.parse(paymentDateInput, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 if (!newDate.isAfter(LocalDate.now())) t.setPaymentDate(newDate);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         // Status
@@ -290,5 +293,27 @@ public class TuitionService {
         }
     }
 
+    /**
+     * Xóa học phí theo ID
+     */
+    public boolean deleteTuition(String tuitionId) {
+        if (tuitionId == null || tuitionId.trim().isEmpty()) {
+            System.out.println("Lỗi: Mã học phí không được để trống!");
+            return false;
+        }
+
+        if (!repository.exists(tuitionId)) {
+            System.out.println("Lỗi: Không tìm thấy học phí với mã '" + tuitionId + "'!");
+            return false;
+        }
+
+        if (repository.delete(tuitionId)) {
+            System.out.println(" Xóa học phí thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể xóa học phí!");
+            return false;
+        }
+    }
 
 }
