@@ -29,14 +29,14 @@ public class MenuGrade extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────┐");
         System.out.println("│           HỆ THỐNG QUẢN LÝ ĐIỂM          │");
         System.out.println("├──────────────────────────────────────────┤");
-        System.out.println("│  1. Nhập điểm cho học sinh               │");
-        System.out.println("│  2. Sửa điểm đã nhập                     │");
-        System.out.println("│  3. Xoá điểm                             │");
-        System.out.println("│  4. Tìm kiếm điểm học sinh               │");
-        System.out.println("│  5. Tính điểm trung bình                 │");
-        System.out.println("│  6. Xếp loại học lực                     │");
-        System.out.println("│  7. Báo cáo điểm lớp                     │");
-        System.out.println("│  8. Xuất danh sách điểm                  │");
+        System.out.println("│  1. Nhập Điểm Cho Học Sinh               │");
+        System.out.println("│  2. Sửa Điểm Đã Nhập                     │");
+        System.out.println("│  3. Xóa Điểm                             │");
+        System.out.println("│  4. Tìm Kiếm Điểm Học Sinh               │");
+        System.out.println("│  5. Tính Điểm Trung Bình                 │");
+        System.out.println("│  6. Xếp Loại Học Lực                     │");
+        System.out.println("│  7. Báo Cáo Điểm Lớp                     │");
+        System.out.println("│  8. Xuất Danh Sách Điểm                  │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
     }
