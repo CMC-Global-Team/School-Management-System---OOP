@@ -8,6 +8,8 @@ public class MenuTeacherScreen extends AbstractScreen {
     private final DeleteTeacherScreen deleteScreen;
     private final SearchTeacherScreen searchScreen;
     private final ListTeacherScreen listScreen;
+    private final AssignTeacherScreen assignTeacherScreen;
+    private final AssignHomeroomScreen assignHomeroomScreen;
 
     public MenuTeacherScreen() {
         super();
@@ -16,6 +18,10 @@ public class MenuTeacherScreen extends AbstractScreen {
         this.deleteScreen = new DeleteTeacherScreen();
         this.searchScreen = new SearchTeacherScreen();
         this.listScreen = new ListTeacherScreen();
+        this.assignTeacherScreen = new AssignTeacherScreen();
+        this.assignHomeroomScreen = new AssignHomeroomScreen();
+
+
     }
 
     @Override
@@ -28,6 +34,9 @@ public class MenuTeacherScreen extends AbstractScreen {
         System.out.println("│  3. Xóa Giáo Viên                        │");
         System.out.println("│  4. Tìm Kiếm Giáo Viên                   │");
         System.out.println("│  5. Danh Sách Tất Cả Giáo Viên           │");
+        System.out.println("│  6. Phân giáo viên chủ nhiệm             │");
+        System.out.println("│  7. Phân công cho Giáo Viên              │");
+        System.out.println("│  8. Xuất danh sách                       │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
     }
@@ -63,6 +72,16 @@ public class MenuTeacherScreen extends AbstractScreen {
                     listScreen.handleInput();
                     pause();
                     break;
+                case 6:
+                    assignTeacherScreen.display();
+                    assignTeacherScreen.handleInput();
+                    pause();
+                    break;
+                case 7:
+                    assignTeacherScreen.display();
+                    assignTeacherScreen.handleInput();
+                    pause();
+                    break;
                 case 0:
                     System.out.println("\nDang quay lai menu chinh...");
                     running = false;
@@ -74,4 +93,3 @@ public class MenuTeacherScreen extends AbstractScreen {
         }
     }
 }
-
