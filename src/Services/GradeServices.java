@@ -16,7 +16,7 @@ public class GradeServices {
     }
 
     /**
-     * Lấy instance duy nhất của ClassroomService (Singleton)
+     * Lấy instance duy nhất của GradeServices (Singleton)
      */
     public static GradeServices getInstance() {
         if (instance == null) {
@@ -24,9 +24,94 @@ public class GradeServices {
         }
         return instance;
     }
+    
+    /**
+     * Kiểm tra mã điểm đã tồn tại chưa
+     */
+    public boolean isGradeIdExists(String gradeId) {
+        return repository.exists(gradeId);
+    }
 
     /**
-     * Thêm điểm mới
+     * Thêm điểm mới với đầy đủ tham số
+     */
+    public boolean addGrade(String gradeID, String studentID, String subjectID, String gradeType, 
+                           double score, int semester, String schoolYear, LocalDate inputDate, String note) {
+        
+        // Validate input
+        if (gradeID == null || gradeID.trim().isEmpty()) {
+            System.out.println("Mã điểm không được để trống!");
+            return false;
+        }
+        
+        if (!gradeID.matches("^D\\d{4}$")) {
+            System.out.println("Mã điểm sai định dạng! (VD: D0001)");
+            return false;
+        }
+        
+        if (repository.exists(gradeID)) {
+            System.out.println("Mã điểm '" + gradeID + "' đã tồn tại trong hệ thống!");
+            return false;
+        }
+        
+        if (!StudentService.getInstance().isStudentIdExists(studentID)) {
+            System.out.println("Không tìm thấy học sinh có mã '" + studentID + "' trong hệ thống!");
+            return false;
+        }
+        
+        if (!SubjectService.getInstance().isSubjectIdExists(subjectID)) {
+            System.out.println("Không tìm thấy môn học có mã '" + subjectID + "' trong hệ thống!");
+            return false;
+        }
+        
+        if (score < 0 || score > 10) {
+            System.out.println("Điểm số phải trong khoảng 0.0 - 10.0!");
+            return false;
+        }
+        
+        if (semester < 1 || semester > 2) {
+            System.out.println("Học kỳ phải là 1 hoặc 2!");
+            return false;
+        }
+        
+        if (schoolYear == null || schoolYear.trim().isEmpty() || !schoolYear.matches("^\\d{4}-\\d{4}$")) {
+            System.out.println("Năm học sai định dạng! (VD: 2024-2025)");
+            return false;
+        }
+        
+        // Kiểm tra năm học hợp lệ
+        String[] parts = schoolYear.split("-");
+        int startYear = Integer.parseInt(parts[0]);
+        int endYear = Integer.parseInt(parts[1]);
+        if (startYear > endYear) {
+            System.out.println("Năm học không hợp lệ! Năm bắt đầu phải nhỏ hơn hoặc bằng năm kết thúc");
+            return false;
+        }
+        
+        if (inputDate == null) {
+            System.out.println("Ngày nhập không được để trống!");
+            return false;
+        }
+        
+        // Kiểm tra trùng loại điểm
+        if (isExistGradeType(semester, subjectID, studentID, gradeType)) {
+            System.out.println("Loại điểm '" + gradeType + "' đã tồn tại cho học sinh này trong học kỳ " + semester + "!");
+            return false;
+        }
+        
+        Grade grade = new Grade(gradeID, studentID, subjectID, gradeType, score, semester, schoolYear, inputDate, note);
+        
+        if (repository.add(grade)) {
+            System.out.println("Thêm điểm thành công!");
+            return true;
+        } else {
+            System.out.println("Thêm điểm thất bại!");
+            return false;
+        }
+    }
+
+    /**
+     * Thêm điểm mới (phương thức cũ để tương thích)
      */
     public boolean addGrade(String gradeID, String studentID, String subjectID, int gradeType) {
 

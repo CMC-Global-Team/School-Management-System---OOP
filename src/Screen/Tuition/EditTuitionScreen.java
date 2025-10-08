@@ -4,7 +4,6 @@ import Models.Tuition;
 import Screen.AbstractScreen;
 import Services.TuitionService;
 import Utils.InputUtil;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -164,7 +163,8 @@ public class EditTuitionScreen extends AbstractScreen {
         
         // Lưu thay đổi
         if (hasChanges) {
-            boolean success = service.updateTuition(tuition);
+            boolean success = service.updateTuition(tuition, studentIdInput, semesterInput, 
+                schoolYearInput, amountInput, paymentDateInput, statusInput, methodInput, noteInput);
             if (success) {
                 System.out.println("\nCập nhật học phí thành công!");
             } else {
