@@ -86,5 +86,28 @@ public class ClassroomService {
         }
     }
     
-
+    /**
+     * Xóa lớp học theo ID
+     */
+    public boolean deleteClass(String classId) {
+        if (classId == null || classId.trim().isEmpty()) {
+            System.out.println("Lỗi: Mã lớp không được để trống!");
+            return false;
+        }
+        
+        if (!repository.exists(classId)) {
+            System.out.println("Lỗi: Không tìm thấy lớp học với mã '" + classId + "'!");
+            return false;
+        }
+        
+        if (repository.delete(classId)) {
+            System.out.println("✓ Xóa lớp học thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể xóa lớp học!");
+            return false;
+        }
+    }
+    
+    
 }
