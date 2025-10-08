@@ -102,6 +102,19 @@ public class InputUtil {
         }
     }
 
+    public static String getPhoneNumber(String prompt) {
+        String phone;
+        while (true) {
+            phone = getString(prompt);
+            if (!phone.matches("\\d{10}")) {
+                System.out.println("Số điện thoại không hợp lệ! Vui lòng nhập đúng 10 chữ số.");
+            } else {
+                return phone;
+            }
+        }
+    }
+
+
     public static void pressEnterToContinue() {
         System.out.println("Nhấn Enter để tiếp tục...");
         scanner.nextLine();
