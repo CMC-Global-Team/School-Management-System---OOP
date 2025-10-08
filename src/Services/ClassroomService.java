@@ -63,5 +63,28 @@ public class ClassroomService {
         }
     }
     
-   
+    /**
+     * Cập nhật lớp học
+     */
+    public boolean updateClass(Classroom classroom) {
+        if (classroom == null) {
+            System.out.println("Lỗi: Classroom không được null!");
+            return false;
+        }
+        
+        if (!repository.exists(classroom.getClassId())) {
+            System.out.println("Lỗi: Không tìm thấy lớp học với mã '" + classroom.getClassId() + "'!");
+            return false;
+        }
+        
+        if (repository.update(classroom)) {
+            System.out.println("✓ Cập nhật lớp học thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể cập nhật lớp học!");
+            return false;
+        }
+    }
+    
+
 }
