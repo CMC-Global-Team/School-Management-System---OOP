@@ -2,6 +2,7 @@ package Utils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputUtil {
@@ -25,5 +26,19 @@ public class InputUtil {
         return input;
     }
 
-    
+    public static String getEmail(String prompt) {
+        String email;
+        do {
+            email = getString(prompt);
+            Matcher matcher = EMAIL_PATTERN.matcher(email);
+            if (!matcher.matches()) {
+                System.out.println("Email không hợp lệ! Vui lòng nhập lại.");
+            } else {
+                break;
+            }
+        } while (true);
+        return email;
+    }
+
+   
 }
