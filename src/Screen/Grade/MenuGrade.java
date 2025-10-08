@@ -46,5 +46,54 @@ public class MenuGrade extends AbstractScreen {
 
     @Override
     public void handleInput() {
+        boolean running = true;
+        while (running) {
+            clearScreen();
+            display();
+            int choice = inputInt("Nhâp lựa chọn của bạn: ");
+
+            switch (choice) {
+                case 1:
+                    enterGradeScreen.display();
+                    enterGradeScreen.handleInput();
+                    break;
+                case 2:
+                    editGradeScreen.display();
+                    editGradeScreen.handleInput();
+                    break;
+                case 3:
+                    deleteGradeScreen.display();
+                    deleteGradeScreen.handleInput();
+                    break;
+                case 4:
+                    searchForStudentGradesScreen.display();
+                    searchForStudentGradesScreen.handleInput();
+                    break;
+                case 5:
+                    averageGradeScreen.display();
+                    averageGradeScreen.handleInput();
+                    break;
+                case 6:
+                    gradeClassificationScreen.display();
+                    gradeClassificationScreen.handleInput();
+                    break;
+                case 7:
+                    reportScreen.display();
+                    reportScreen.handleInput();
+                    break;
+                case 8:
+                    exportScreen.display();
+                    exportScreen.handleInput();
+                    break;
+                case 0:
+                    System.out.println("\nĐang quay lại menu chính...");
+                    running = false;
+                    break;
+                default:
+                    System.out.println("\n Lựa chọn không hợp lệ, vui lòng thử lại");
+                    pause();
+                    break;
+            }
+        }
     }
 }
