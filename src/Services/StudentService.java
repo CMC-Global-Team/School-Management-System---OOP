@@ -59,7 +59,7 @@ public class StudentService {
 
         // Thêm vào repository
         if (repository.add(student)) {
-            System.out.println("✓ Thêm học sinh thành công!");
+            System.out.println("Thêm học sinh thành công!");
             return true;
         } else {
             System.out.println("Lỗi: Không thể thêm học sinh!");
@@ -82,7 +82,7 @@ public class StudentService {
         }
 
         if (repository.update(student)) {
-            System.out.println("✓ Cập nhật học sinh thành công!");
+            System.out.println("Cập nhật học sinh thành công!");
             return true;
         } else {
             System.out.println("Lỗi: Không thể cập nhật học sinh!");
@@ -105,7 +105,7 @@ public class StudentService {
         }
 
         if (repository.delete(id)) {
-            System.out.println("✓ Xóa học sinh thành công!");
+            System.out.println("Xóa học sinh thành công!");
             return true;
         } else {
             System.out.println("Lỗi: Không thể xóa học sinh!");
@@ -208,6 +208,125 @@ public class StudentService {
 
         System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
         System.out.println("Tìm thấy: " + results.size() + " học sinh");
+    }
+
+    /**
+     * Lọc học sinh theo lớp
+     */
+    public List<Student> filterByClass(String className) {
+        return repository.findAll().stream()
+                .filter(student -> student.getClassName().equalsIgnoreCase(className))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * Lọc học sinh theo trạng thái
+     */
+    public List<Student> filterByStatus(String status) {
+        return repository.findAll().stream()
+                .filter(student -> student.getStatus().equalsIgnoreCase(status))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * Lọc học sinh theo giới tính
+     */
+    public List<Student> filterByGender(String gender) {
+        return repository.findAll().stream()
+                .filter(student -> student.getGender().equalsIgnoreCase(gender))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * Lọc học sinh theo nhiều tiêu chí
+     */
+    public List<Student> filterStudents(String className, String status, String gender) {
+        return repository.findAll().stream()
+                .filter(student -> {
+                    boolean classMatch = className == null || className.trim().isEmpty() || 
+                                      student.getClassName().equalsIgnoreCase(className);
+                    boolean statusMatch = status == null || status.trim().isEmpty() || 
+                                        student.getStatus().equalsIgnoreCase(status);
+                    boolean genderMatch = gender == null || gender.trim().isEmpty() || 
+                                        student.getGender().equalsIgnoreCase(gender);
+                    return classMatch && statusMatch && genderMatch;
+                })
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    /**
+     * Xuất danh sách học sinh ra file .txt
+     */
+    public boolean exportStudentsToFile(String filename, List<Student> students) {
+        try (java.io.FileWriter writer = new java.io.FileWriter(filename)) {
+            
+            // Ghi header
+            writer.write("DANH SÁCH HỌC SINH\n");
+            writer.write("=".repeat(80) + "\n");
+            writer.write(String.format("%-10s %-25s %-15s %-10s %-10s %-15s %-15s %-20s %-10s\n",
+                    "Mã HS", "Họ Tên", "Ngày Sinh", "Giới Tính", "Lớp", "Khóa", "SĐT PH", "Địa Chỉ", "Trạng Thái"));
+            writer.write("-".repeat(80) + "\n");
+            
+            // Ghi dữ liệu học sinh
+            for (Student student : students) {
+                writer.write(String.format("%-10s %-25s %-15s %-10s %-10s %-15s %-15s %-20s %-10s\n",
+                        student.getId(),
+                        student.getName(),
+                        student.getDateOfBirth(),
+                        student.getGender(),
+                        student.getClassName(),
+                        student.getCourse(),
+                        student.getParentPhone(),
+                        student.getAddress(),
+                        student.getStatus()));
+            }
+            
+            writer.write("-".repeat(80) + "\n");
+            writer.write("Tổng số học sinh: " + students.size() + "\n");
+            writer.write("Ngày xuất: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + "\n");
+            
+            return true;
+        } catch (java.io.IOException e) {
+            System.err.println("Lỗi khi xuất file: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Xuất tất cả học sinh ra file .txt
+     */
+    public boolean exportAllStudentsToFile(String filename) {
+        return exportStudentsToFile(filename, getAllStudents());
+    }
+
+    /**
+     * Hiển thị kết quả lọc
+     */
+    public void displayFilterResults(List<Student> students, String filterType) {
+        if (students.isEmpty()) {
+            System.out.println("\nKhông có học sinh nào phù hợp với tiêu chí lọc.");
+            return;
+        }
+
+        System.out.println("\n┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                    KẾT QUẢ LỌC " + filterType.toUpperCase() + "                                    │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-10s %-25s %-15s %-10s %-10s %-10s │%n", "Mã HS", "Họ Tên", "Ngày Sinh", "Giới Tính", "Lớp", "Trạng Thái");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+
+        for (Student student : students) {
+            System.out.printf("│ %-10s %-25s %-15s %-10s %-10s %-10s │%n",
+                    truncate(student.getId(), 10),
+                    truncate(student.getName(), 25),
+                    student.getDateOfBirth(),
+                    truncate(student.getGender(), 10),
+                    truncate(student.getClassName(), 10),
+                    truncate(student.getStatus(), 10)
+            );
+        }
+
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+        System.out.println("Tìm thấy: " + students.size() + " học sinh");
     }
 
     /**
