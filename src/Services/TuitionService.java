@@ -344,5 +344,11 @@ public class TuitionService {
                 .toList();
     }
 
+    /**
+     * Kiểm tra mã học phí đã tồn tại chưa
+     */
+    public boolean isTuitionIdExists(String tuitionId) {
+        return repository.exists(tuitionId);
+    }
 
 }
