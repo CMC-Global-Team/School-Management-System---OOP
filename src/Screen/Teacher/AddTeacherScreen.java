@@ -50,8 +50,8 @@ public class AddTeacherScreen extends AbstractScreen {
         }
 
         int experience = InputUtil.getInt("Số năm kinh nghiệm: ");
-        String email = InputUtil.getString("Email: ");
-        String phone = InputUtil.getString("Số điện thoại: ");
+        String email = InputUtil.getEmail("Email: ");
+        String phone = InputUtil.getPhoneNumber("Số điện thoại: ");
         String homeroom = InputUtil.getString("Lớp chủ nhiệm (Enter nếu chưa có): ");
 
         //Nhập trạng thái theo số
