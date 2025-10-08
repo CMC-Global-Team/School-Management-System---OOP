@@ -1,9 +1,18 @@
 package Services;
 
-import Models.Teacher;
+import Models.Classroom;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import Models.TeachingAssignment; // nhớ import đúng package của bạn
+import Utils.FileUtil;
+import Utils.InputUtil;
 
+import Models.Teacher;
+import java.util.Optional;
+import java.util.Scanner;
 /**
  * TeacherService - Lớp Service xử lý logic nghiệp vụ cho giáo viên
  * Dựa theo mẫu StudentService, sử dụng Singleton Pattern
@@ -242,5 +251,218 @@ public class TeacherService {
         if (str == null) return "";
         if (str.length() <= maxLength) return str;
         return str.substring(0, maxLength - 3) + "...";
+    }
+
+    /**
+     * PHân công giảng daạy cho giáo viên
+     */
+
+    public void assignTeacherToClass() {
+        List<String> teacherLines = new ArrayList<>();
+        List<Teacher> teachers = new ArrayList<>();
+
+        try {
+            if (FileUtil.fileExists("Data/teachers.txt")) {
+                teacherLines = FileUtil.readLines("Data/teachers.txt");
+                for (String line : teacherLines) {
+                    Teacher t = Teacher.fromString(line);
+                    if (t != null) teachers.add(t);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi đọc file giáo viên: " + e.getMessage());
+            return;
+        }
+
+        if (teachers.isEmpty()) {
+            System.out.println("Chưa có giáo viên nào trong hệ thống!");
+            return;
+        }
+
+        System.out.println("\nDanh sách giáo viên:");
+        for (int i = 0; i < teachers.size(); i++) {
+            Teacher t = teachers.get(i);
+            System.out.printf("%d. %-10s | %-25s | CN: %s\n",
+                    i + 1,
+                    t.getId(),
+                    t.getName(),
+                    (t.getTeacherHomeroom() == null || t.getTeacherHomeroom().isEmpty()) ? "Chưa có" : t.getTeacherHomeroom());
+        }
+
+        int choice = InputUtil.getInt("Chọn số thứ tự giáo viên để gán lớp: ");
+        if (choice < 1 || choice > teachers.size()) {
+            System.out.println("Lựa chọn không hợp lệ!");
+            return;
+        }
+
+        Teacher selectedTeacher = teachers.get(choice - 1);
+        System.out.println("\nGiáo viên được chọn: " + selectedTeacher.getName());
+        System.out.println("Lớp hiện tại: " +
+                (selectedTeacher.getTeacherHomeroom() == null || selectedTeacher.getTeacherHomeroom().isEmpty()
+                        ? "Chưa có" : selectedTeacher.getTeacherHomeroom()));
+
+        String newHomeroom = InputUtil.getNonEmptyString("Nhập lớp chủ nhiệm mới: ");
+
+        // Ghi đè lớp chủ nhiệm
+        selectedTeacher.setTeacherHomeroom(newHomeroom);
+
+        // Ghi lại file
+        List<String> updatedLines = new ArrayList<>();
+        for (Teacher t : teachers) {
+            updatedLines.add(t.toString());
+        }
+
+        try {
+            FileUtil.writeLines("Data/teachers.txt", updatedLines);
+            System.out.println("\nĐã cập nhật lớp chủ nhiệm cho giáo viên!");
+        } catch (Exception e) {
+            System.out.println("Lỗi khi ghi file: " + e.getMessage());
+        }
+
+        InputUtil.pressEnterToContinue();
+    }
+
+    public void assignTeaching() {
+        // 1️⃣ Đọc file danh sách giáo viên
+        List<String> teacherLines;
+        try {
+            teacherLines = FileUtil.readLines("Data/teachers.txt");
+        } catch (Exception e) {
+            System.out.println("Lỗi đọc file giáo viên: " + e.getMessage());
+            return;
+        }
+
+        if (teacherLines.isEmpty()) {
+            System.out.println("⚠ Chưa có giáo viên nào trong hệ thống!");
+            return;
+        }
+
+        // 2️⃣ Hiển thị danh sách giáo viên
+        System.out.println("\n=== DANH SÁCH GIÁO VIÊN ===");
+        for (String line : teacherLines) {
+            Teacher t = Teacher.fromString(line);
+            if (t != null)
+                System.out.printf("ID: %-8s | Tên: %-20s | Môn: %-15s | Lớp CN: %s%n",
+                        t.getId(), t.getName(), t.getTeacherSubjects(), t.getTeacherHomeroom());
+        }
+
+        // 3️⃣ Chọn giáo viên cần phân công
+        String teacherId = InputUtil.getNonEmptyString("\nNhập mã giáo viên cần phân công: ");
+        Teacher selectedTeacher = null;
+        for (String line : teacherLines) {
+            Teacher t = Teacher.fromString(line);
+            if (t != null && t.getId().equalsIgnoreCase(teacherId)) {
+                selectedTeacher = t;
+                break;
+            }
+        }
+
+        if (selectedTeacher == null) {
+            System.out.println("Không tìm thấy giáo viên có mã: " + teacherId);
+            return;
+        }
+
+        // 4️⃣ Nhập thông tin phân công
+        String subject = InputUtil.getNonEmptyString("Nhập môn giảng dạy: ");
+        String className = InputUtil.getNonEmptyString("Nhập lớp giảng dạy: ");
+
+        TeachingAssignment assignment = new TeachingAssignment(
+                selectedTeacher.getId(),
+                selectedTeacher.getName(),
+                subject,
+                className
+        );
+
+        // 5️⃣ Đọc file phân công cũ + thêm mới
+        List<String> assignmentLines = new ArrayList<>();
+        try {
+            if (FileUtil.fileExists("Data/teacher_assignments.txt")) {
+                assignmentLines = FileUtil.readLines("Data/teacher_assignments.txt");
+            }
+        } catch (Exception e) {
+            System.out.println("⚠ Lỗi đọc file phân công: " + e.getMessage());
+        }
+
+        assignmentLines.add(assignment.toString());
+
+        // 6️⃣ Ghi lại file
+        try {
+            FileUtil.writeLines("Data/teacher_assignments.txt", assignmentLines);
+            System.out.println("\nĐã phân công giảng dạy thành công!");
+        } catch (Exception e) {
+            System.out.println("Lỗi khi ghi file: " + e.getMessage());
+        }
+
+        InputUtil.pressEnterToContinue();
+    }
+
+
+
+    /**
+     * Xuất danh sách lớp & môn mà giáo viên đang giảng dạy ra file txt
+     */
+    public void showTeachingClassesByTeacher() {
+        try {
+            // 1️⃣ Đọc file phân công
+            List<String> lines = FileUtil.readLines("Data/teachers.txt");
+            if (lines.isEmpty()) {
+                System.out.println("⚠ Hiện chưa có dữ liệu phân công giảng dạy nào!");
+                InputUtil.pressEnterToContinue();
+                return;
+            }
+
+            // 2️⃣ Nhập mã giáo viên
+            String teacherId = InputUtil.getNonEmptyString("Nhập mã giáo viên cần xem: ");
+
+            // 3️⃣ Lọc danh sách lớp theo mã giáo viên
+            List<TeachingAssignment> assignments = new ArrayList<>();
+            for (String line : lines) {
+                TeachingAssignment ta = TeachingAssignment.fromString(line);
+                if (ta != null && ta.getTeacherId().equalsIgnoreCase(teacherId)) {
+                    assignments.add(ta);
+                }
+            }
+
+            if (assignments.isEmpty()) {
+                System.out.println("⚠ Giáo viên này hiện chưa được phân công giảng dạy lớp nào!");
+                InputUtil.pressEnterToContinue();
+                return;
+            }
+
+            // 4️⃣ Tạo nội dung xuất ra file
+            String teacherName = assignments.get(0).getTeacherName();
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("=== DANH SÁCH LỚP & MÔN GIẢNG DẠY CỦA GIÁO VIÊN ===\n");
+            sb.append("Giáo viên: ").append(teacherName)
+                    .append(" (").append(teacherId).append(")\n");
+            sb.append("-----------------------------------------------------------\n");
+            sb.append(String.format("%-20s %-20s%n", "Lớp Học", "Môn Giảng Dạy"));
+            sb.append("-----------------------------------------------------------\n");
+
+            for (TeachingAssignment ta : assignments) {
+                sb.append(String.format("%-20s %-20s%n", ta.getClassName(), ta.getSubject()));
+            }
+
+            sb.append("-----------------------------------------------------------\n");
+            sb.append(String.format("Tổng số lớp đang giảng dạy: %d%n", assignments.size()));
+
+            // 5️⃣ Ghi nội dung ra file (tạo thư mục nếu chưa có)
+            File folder = new File("Data/reports");
+            folder.mkdirs(); // tạo thư mục Data/reports nếu chưa có
+
+            String outputPath = "Data/reports/" + teacherId + "_teaching.txt";
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath))) {
+                writer.write(sb.toString());
+            }
+
+            System.out.println("\n✅ Đã xuất danh sách ra file: " + new File(outputPath).getAbsolutePath());
+
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi khi đọc hoặc ghi file: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        InputUtil.pressEnterToContinue();
     }
 }
