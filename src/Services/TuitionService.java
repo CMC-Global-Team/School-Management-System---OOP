@@ -330,4 +330,19 @@ public class TuitionService {
         return repository.findAll();
     }
 
+    public List<Tuition> searchTuitions(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            // Trả về toàn bộ danh sách
+            return getAllTuitions();
+        }
+
+        String key = keyword.trim().toLowerCase();
+
+        return repository.findAll().stream()
+                .filter(t -> t.getTuitionId().equalsIgnoreCase(key) ||
+                        t.getStudentId().equalsIgnoreCase(key))
+                .toList();
+    }
+
+
 }
