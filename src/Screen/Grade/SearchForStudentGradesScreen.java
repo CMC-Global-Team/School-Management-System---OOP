@@ -50,5 +50,16 @@ public class SearchForStudentGradesScreen extends AbstractScreen {
         }
         return results;
     }
+
+    public static List<String> findGradesBySemester(List<String> gradeLines, int semester, String schoolYear){
+        List<String> results = new ArrayList<>();
+        for(String line : gradeLines){
+            Grade grade = Grade.fromString(line);
+            if(grade != null && grade.getSemester() == semester && grade.getSchoolYear().equals(schoolYear)){
+                results.add(line);
+            }
+        }
+        return results;
+    }
     
 }
