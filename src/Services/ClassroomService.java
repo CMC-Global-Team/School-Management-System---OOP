@@ -144,5 +144,35 @@ public class ClassroomService {
         return repository.count();
     }
     
-
+    /**
+     * Hiển thị danh sách tất cả lớp học
+     */
+    public void displayAllClasses() {
+        List<Classroom> classes = getAllClasses();
+        
+        if (classes.isEmpty()) {
+            System.out.println("\nKhông có lớp học nào trong hệ thống.");
+            return;
+        }
+        
+        System.out.println("\n┌───────────────────────────────────────────────────────────────┐");
+        System.out.println("│                  DANH SÁCH LỚP HỌC                            │");
+        System.out.println("├───────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-10s %-25s %-15s %-10s │%n", "Mã Lớp", "Tên Lớp", "Năm Học", "Niên Khóa");
+        System.out.println("├───────────────────────────────────────────────────────────────┤");
+        
+        for (Classroom classroom : classes) {
+            System.out.printf("│ %-10s %-25s %-15s %-10s │%n",
+                truncate(classroom.getClassId(), 10),
+                truncate(classroom.getClassName(), 25),
+                truncate(classroom.getSchoolYear(), 15),
+                truncate(classroom.getCourse(), 10)
+            );
+        }
+        
+        System.out.println("└─────────────────────────────────────────────────────────────────────┘");
+        System.out.println("Tổng số lớp: " + classes.size());
+    }
+    
+    
 }
