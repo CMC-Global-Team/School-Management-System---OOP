@@ -13,23 +13,29 @@ public class RecordTuitionScreen extends AbstractScreen {
     @Override
     public void display() {
         System.out.println("┌──────────────────────────────────────────┐");
-        System.out.println("│       GHI NHẬN THANH TOÁN HỌC PHÍ        │");
+        System.out.println("│         Ghi Nhận Thanh Toán Học Phí       │");
         System.out.println("└──────────────────────────────────────────┘");
         
-        System.out.println("\nHƯỚNG DẪN SỬ DỤNG:");
-        System.out.println("- Mã học phí: Định dạng TFxxxx (VD: TF0001)");
-        System.out.println("- Mã học sinh: Phải tồn tại trong hệ thống");
-        System.out.println("- Năm học: Định dạng YYYY-YYYY (VD: 2024-2025)");
-        System.out.println("- Số tiền: Nhập số nguyên (VD: 5000000 = 5,000,000 VND)");
-        System.out.println("- Ngày thu: Định dạng dd/MM/yyyy (VD: 09/10/2024)");
-        System.out.println("- Trạng thái: 0=Chưa thu, 1=Đã thu");
-        System.out.println("- Phương thức: 0=Tiền mặt, 1=Chuyển khoản");
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN CẦN NHẬP                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Mã học phí: TFxxxx (VD: TF0001, TF0002...)                              │");
+        System.out.println("│ Mã học sinh: BSx (VD: BS2, BS3...) - Phải tồn tại trong hệ thống        │");
+        System.out.println("│ Học kỳ: 1 hoặc 2                                                        │");
+        System.out.println("│ Năm học: YYYY-YYYY (VD: 2024-2025)                                      │");
+        System.out.println("│ Số tiền: Nhập số nguyên (VD: 5000000 = 5,000,000 VND)                  │");
+        System.out.println("│ Ngày thu: dd/MM/yyyy (VD: 15/10/2024) - Không được vượt quá hôm nay     │");
+        System.out.println("│ Trạng thái: 0-Chưa thu, 1-Đã thu                                        │");
+        System.out.println("│ Phương thức: 0-Tiền mặt, 1-Chuyển khoản (chỉ khi đã thu)                │");
+        System.out.println("│ Ghi chú: Tùy chọn, có thể để trống                                      │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
     
     @Override
     public void handleInput() {
         System.out.println("\n" + "=".repeat(50));
-        System.out.println("NHẬP THÔNG TIN HỌC PHÍ");
+        System.out.println("                    NHẬP THÔNG TIN HỌC PHÍ");
         System.out.println("=".repeat(50));
         
         // Hiển thị danh sách học sinh để tham khảo
@@ -47,7 +53,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         // Kiểm tra mã học phí đã tồn tại chưa
         TuitionService service = TuitionService.getInstance();
         while (service.isTuitionIdExists(tuitionId)) {
-            System.out.println("Mã học phí '" + tuitionId + "' đã tồn tại!");
+            System.out.println("Mã học phí '" + tuitionId + "' đã tồn tại trong hệ thống!");
             tuitionId = InputUtil.getNonEmptyString("Nhập mã học phí khác (TFxxxx): ");
         }
         
@@ -56,7 +62,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         StudentService studentService = StudentService.getInstance();
         while (studentId == null || studentId.trim().isEmpty() || !studentService.isStudentIdExists(studentId)) {
             if (studentId != null && !studentId.trim().isEmpty() && !studentService.isStudentIdExists(studentId)) {
-                System.out.println("Không tìm thấy học sinh có mã '" + studentId + "'!");
+                System.out.println("Không tìm thấy học sinh có mã '" + studentId + "' trong hệ thống!");
             }
             studentId = InputUtil.getNonEmptyString("Mã học sinh: ");
         }
@@ -84,7 +90,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         int startYear = Integer.parseInt(parts[0]);
         int endYear = Integer.parseInt(parts[1]);
         while (startYear > endYear) {
-            System.out.println("Năm học không hợp lệ! Năm bắt đầu phải <= năm kết thúc");
+                System.out.println("Năm học không hợp lệ! Năm bắt đầu phải nhỏ hơn hoặc bằng năm kết thúc");
             schoolYear = InputUtil.getNonEmptyString("Nhập lại năm học (YYYY-YYYY): ");
             parts = schoolYear.split("-");
             startYear = Integer.parseInt(parts[0]);
@@ -113,7 +119,7 @@ public class RecordTuitionScreen extends AbstractScreen {
                     paymentDate = null;
                 }
             } catch (Exception e) {
-                System.out.println("Định dạng ngày không hợp lệ! Vui lòng nhập lại.");
+                   System.out.println("Định dạng ngày không hợp lệ! Vui lòng nhập lại theo định dạng dd/MM/yyyy.");
             }
         }
         
@@ -122,7 +128,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         int statusChoice = -1;
         while (statusChoice < 0 || statusChoice > 1) {
             if (statusChoice != -1) {
-                System.out.println("Lựa chọn không hợp lệ!");
+                System.out.println("Lựa chọn không hợp lệ! Vui lòng chọn 0 hoặc 1.");
             }
             System.out.println("\nChọn trạng thái học phí:");
             System.out.println("0 - Chưa thu");
@@ -141,7 +147,7 @@ public class RecordTuitionScreen extends AbstractScreen {
             int methodChoice = -1;
             while (methodChoice < 0 || methodChoice > 1) {
                 if (methodChoice != -1) {
-                    System.out.println("Lựa chọn không hợp lệ!");
+                    System.out.println("Lựa chọn không hợp lệ! Vui lòng chọn 0 hoặc 1.");
                 }
                 System.out.println("\nChọn phương thức thanh toán:");
                 System.out.println("0 - Tiền mặt");
@@ -162,10 +168,10 @@ public class RecordTuitionScreen extends AbstractScreen {
                                            amount, paymentDate, method, status, note);
         
         if (success) {
-            System.out.println("\nThêm học phí thành công!");
-        } else {
-            System.out.println("\nThêm học phí thất bại!");
-        }
+           System.out.println("\nThêm học phí thành công!");
+           } else {
+               System.out.println("\nThêm học phí thất bại!");
+           }
         
         pause();
     }
