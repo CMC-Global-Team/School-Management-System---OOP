@@ -39,5 +39,16 @@ public class SearchForStudentGradesScreen extends AbstractScreen {
         }
         return results;
     }
+
+    public static List<String> findGradesBySubjectID(List<String> gradeLines, String subjectID){
+        List<String> results = new ArrayList<>();
+        for(String line : gradeLines){
+            Grade grade = Grade.fromString(line);
+            if(grade != null && grade.getSubjectId().equals(subjectID)){
+                results.add(line);
+            }
+        }
+        return results;
+    }
     
 }
