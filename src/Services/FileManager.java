@@ -33,5 +33,24 @@ public class FileManager {
         }
     }
     
-   
+    /**
+     * Kiểm tra và tạo file nếu chưa tồn tại
+     * @param filePath Đường dẫn file
+     */
+    public static void ensureFileExists(String filePath) {
+        initializeDataDirectory();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            try {
+                boolean created = file.createNewFile();
+                if (created) {
+                    System.out.println("Đã tạo file: " + filePath);
+                }
+            } catch (Exception e) {
+                System.err.println("Lỗi khi tạo file " + filePath + ": " + e.getMessage());
+            }
+        }
+    }
+    
+
 }
