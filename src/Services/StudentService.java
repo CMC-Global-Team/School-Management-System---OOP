@@ -228,5 +228,14 @@ public class StudentService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    /**
+     * Lọc học sinh theo giới tính
+     */
+    public List<Student> filterByGender(String gender) {
+        return repository.findAll().stream()
+                .filter(student -> student.getGender().equalsIgnoreCase(gender))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
 
 }
