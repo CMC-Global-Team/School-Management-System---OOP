@@ -59,16 +59,29 @@ public class GradeServices {
     }
 
     /**
-     * Lấy tất cả điểm theo học kỳ và năm học của 1 học sinh
+     * Lấy tất cả điểm 1 môn học theo 1 học kỳ của 1 học sinh
      */
-    public List<Grade> getAllGradeBySemester(int semester, String schoolYear, String studentID) {
-        List<Grade> grades = getAllGradeByStudentID(studentID);
-        List<Grade> subjectGrades = new ArrayList<>();
+    public List<Grade> getAllGradeBySemester(int semester, String subjectID, String studentID) {
+        List<Grade> grades = getAllGradeBySubjectID(subjectID, studentID);
+        List<Grade> semesterGrades = new ArrayList<>();
         for (Grade grade : grades) {
-            if(grade.getSchoolYear().equalsIgnoreCase(schoolYear) && grade.getSemester() == semester) {
-                subjectGrades.add(grade);
+            if(grade.getSemester() == semester) {
+                semesterGrades.add(grade);
             }
         }
-        return subjectGrades;
+        return semesterGrades;
+    }
+
+    /**
+     * Kiểm tra xem loại điểm liệu đã tồn tại trong học kỳ chưa
+     */
+    public boolean isExistGradeType(int semester,String subjectID, String studentID, String type) {
+        List<Grade> grades = getAllGradeBySemester(semester, subjectID, studentID);
+        for (Grade grade : grades) {
+            if(grade.getGradeType().equalsIgnoreCase(type) &&  grade.getSemester() == semester) {
+                return true;
+            }
+        }
+        return false;
     }
 }
