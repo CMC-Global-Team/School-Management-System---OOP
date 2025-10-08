@@ -4,7 +4,6 @@ import Models.Teacher;
 import Screen.AbstractScreen;
 import Services.TeacherService;
 import Utils.InputUtil;
-
 import java.util.Collections;
 
 /**
@@ -25,6 +24,20 @@ public class UpdateTeacherScreen extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────┐");
         System.out.println("│       CẬP NHẬT THÔNG TIN GIÁO VIÊN      │");
         System.out.println("└──────────────────────────────────────────┘");
+        
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN CẦN NHẬP                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ 1. Nhập mã giáo viên cần cập nhật (VD: GV0001)                         │");
+        System.out.println("│ 2. Xem thông tin hiện tại của giáo viên                                │");
+        System.out.println("│ 3. Nhập thông tin mới (để trống nếu không thay đổi)                    │");
+        System.out.println("│ 4. Hệ thống sẽ cập nhật các thông tin đã thay đổi                      │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ CÁC TRƯỜNG CÓ THỂ CẬP NHẬT:                                             │");
+        System.out.println("│ - Họ và tên, Giới tính, Ngày sinh, Địa chỉ                             │");
+        System.out.println("│ - Số điện thoại, Email, Môn giảng dạy, Lớp chủ nhiệm                  │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

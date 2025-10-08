@@ -13,6 +13,19 @@ public class DeleteTeacherScreen extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────────┐");
         System.out.println("│                 XÓA GIÁO VIÊN                │");
         System.out.println("└──────────────────────────────────────────────┘");
+        
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           CẢNH BÁO QUAN TRỌNG                           │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ 1. Nhập mã giáo viên cần xóa (VD: GV0001)                              │");
+        System.out.println("│ 2. Hệ thống sẽ hiển thị thông tin giáo viên                             │");
+        System.out.println("│ 3. Xác nhận việc xóa bằng cách nhập 'y' hoặc 'yes'                      │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ ⚠️  CẢNH BÁO: Việc xóa giáo viên sẽ không thể hoàn tác!                 │");
+        System.out.println("│    Tất cả thông tin liên quan đến giáo viên sẽ bị xóa vĩnh viễn        │");
+        System.out.println("│    Bao gồm: Thông tin cá nhân, môn dạy, lớp chủ nhiệm                   │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

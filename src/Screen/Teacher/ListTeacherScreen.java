@@ -23,6 +23,17 @@ public class ListTeacherScreen extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────┐");
         System.out.println("│          DANH SÁCH GIÁO VIÊN             │");
         System.out.println("└──────────────────────────────────────────┘");
+        
+        System.out.println("\nHƯỚNG DẪN:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN HIỂN THỊ                           │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Màn hình này hiển thị danh sách tất cả giáo viên trong hệ thống        │");
+        System.out.println("│ Bao gồm: Mã GV, Tên, Giới tính, Ngày sinh, Địa chỉ, SĐT, Email        │");
+        System.out.println("│          Môn giảng dạy, Lớp chủ nhiệm                                   │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ Nhấn Enter để tiếp tục sau khi xem xong danh sách                       │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
 
         List<Teacher> teachers = teacherService.getAllTeachers();
 

@@ -1,14 +1,11 @@
 package Screen.Teacher;
 
-import Models.Teacher;
 import Models.Subject;
 import Screen.AbstractScreen;
-import Services.TeacherService;
 import Services.SubjectService;
+import Services.TeacherService;
 import Utils.InputUtil;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AddTeacherScreen extends AbstractScreen {
 
@@ -20,6 +17,21 @@ public class AddTeacherScreen extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────┐");
         System.out.println("│           THÊM GIÁO VIÊN MỚI             │");
         System.out.println("└──────────────────────────────────────────┘");
+        
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           THÔNG TIN CẦN NHẬP                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ Mã giáo viên: GVxxxx (VD: GV0001) - Phải duy nhất trong hệ thống      │");
+        System.out.println("│ Họ và tên: Tên đầy đủ của giáo viên                                    │");
+        System.out.println("│ Giới tính: Nam hoặc Nữ                                                 │");
+        System.out.println("│ Ngày sinh: dd/MM/yyyy (VD: 15/03/1985)                                 │");
+        System.out.println("│ Địa chỉ: Địa chỉ liên hệ của giáo viên                                 │");
+        System.out.println("│ Số điện thoại: Số điện thoại liên hệ                                   │");
+        System.out.println("│ Email: Địa chỉ email liên hệ                                             │");
+        System.out.println("│ Môn giảng dạy: Các môn học mà giáo viên có thể dạy                     │");
+        System.out.println("│ Lớp chủ nhiệm: Lớp mà giáo viên làm chủ nhiệm (có thể để trống)        │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override
