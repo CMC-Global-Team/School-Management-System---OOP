@@ -1,7 +1,14 @@
 package Screen.Grade;
 
 import Screen.AbstractScreen;
-import Services.GradeServices;
+import Models.Grade;
+import Utils.FileUtil;
+import Utils.InputUtil;
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchForStudentGradesScreen extends AbstractScreen {
     @Override
@@ -13,22 +20,48 @@ public class SearchForStudentGradesScreen extends AbstractScreen {
 
     @Override
     public void handleInput() {
-        System.out.println("\nNhập từ khóa tìm kiếm:");
-        System.out.println("(Có thể tìm theo: , Tên lớp, Năm học, Tên GVCN)");
-
-        String keyword = input("\nTừ khóa: ");
-
-        if (keyword == null || keyword.trim().isEmpty()) {
-            System.out.println("Từ khóa không được để trống!");
-            pause();
-            return;
+        List<String> gradeLines = new ArrayList<>();
+        try{
+            if(FileUtil.fileExists("data/grades.txt")){
+                gradeLines = FileUtil.readLines("src/Data/grades.txt");
+            }
+        } catch (IOException e) {
+            System.out.println("Có lỗi xảy ra khi đọc file điểm số: " + e.getMessage());
         }
 
-        // Sử dụng service để tìm kiếm và hiển thị kết quả
-        GradeServices.getInstance().displaySearchResults(keyword);
-        pause();
-    }
+        System.out.println("Bạn muốn tìm bằng:");
+        System.out.println("1. Mã học sinh");
+        System.out.println("2. Mã môn");
+        System.out.println("3. Năm học và học kỳ");
+        System.out.println("0. Quay lại");
+        int choice = InputUtil.getInt("Lựa chọn của bạn(0-3): ");
 
+        switch (choice){
+            case 1:
+                String studentID = InputUtil.getString("Nhập mã học sinh(bỏ trống và nhấn enter để quay lại): ");
+                displayResults(findGradesByStudentID(gradeLines, studentID));
+                pause();
+                break;
+            case 2:
+                String subjectID = InputUtil.getString("Nhập mã môn học(bỏ trống và nhấn enter để quay lại): ");
+                displayResults(findGradesBySubjectID(gradeLines, subjectID));
+                pause();
+                break;
+            case 3:
+                System.out.println("Năm học:");
+                String schoolYear = EnterGradeScreen.schoolYearInput();
+                int semester = InputUtil.getInt("Nhập học kỳ: " );
+                displayResults(findGradesBySemester(gradeLines, semester, schoolYear));
+                pause();
+                break;
+            case 0:
+                break;
+            default:
+                System.out.println("Lựa chọn không hợp lệ!");
+                pause();
+                break;
+        }
+    }
     public static List<String> findGradesByStudentID(List<String> gradeLines, String studentID){
         List<String> results = new ArrayList<>();
         for(String line : gradeLines){
@@ -62,7 +95,7 @@ public class SearchForStudentGradesScreen extends AbstractScreen {
         return results;
     }
 
-     public static void displayResults(List<String> results){
+    public static void displayResults(List<String> results){
         if(!results.isEmpty()) {
             for (String line : results) {
                 Grade g = Grade.fromString(line);
@@ -82,5 +115,4 @@ public class SearchForStudentGradesScreen extends AbstractScreen {
             System.out.println("Không tìm thấy thông tin!");
         }
     }
-    
 }
