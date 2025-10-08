@@ -113,6 +113,28 @@ public class GradeServices {
     }
 
     /**
+     * Xóa điểm theo ID
+     */
+    public boolean deleteGrade(String GradeID) {
+        if (GradeID == null || GradeID.trim().isEmpty()) {
+            System.out.println("Lỗi: Mã lớp không được để trống!");
+            return false;
+        }
+
+        if (!repository.exists(GradeID)) {
+            System.out.println("Lỗi: Không tìm thấy lớp học với mã '" + GradeID + "'!");
+            return false;
+        }
+
+        if (repository.delete(GradeID)) {
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể xóa lớp học!");
+            return false;
+        }
+    }
+
+    /**
      * Tìm điểm theo mã học sinh
      */
     public List<Grade> getAllGrade() {
