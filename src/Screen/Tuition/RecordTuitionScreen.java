@@ -35,13 +35,72 @@ public class RecordTuitionScreen extends AbstractScreen {
         // Hiển thị danh sách học sinh để tham khảo
         displayStudentList();
         
-        String tuitionId = InputUtil.getNonEmptyString("Mã học phí (TFxxxx): ");
-        String studentId = InputUtil.getNonEmptyString("Mã học sinh: ");
-        int semester = InputUtil.getInt("Học kỳ (1 hoặc 2): ");
-        String schoolYear = InputUtil.getNonEmptyString("Năm học (YYYY-YYYY): ");
-        double amount = InputUtil.getDouble("Số tiền (VND, VD: 5000000): ");
+        // Nhập mã học phí với validation
+        String tuitionId = null;
+        while (tuitionId == null || tuitionId.trim().isEmpty() || !tuitionId.matches("^TF\\d{4}$")) {
+            if (tuitionId != null && !tuitionId.trim().isEmpty() && !tuitionId.matches("^TF\\d{4}$")) {
+                System.out.println("Mã học phí sai định dạng! (VD: TF0001)");
+            }
+            tuitionId = InputUtil.getNonEmptyString("Mã học phí (TFxxxx): ");
+        }
         
-        // Nhập ngày thu
+        // Kiểm tra mã học phí đã tồn tại chưa
+        TuitionService service = TuitionService.getInstance();
+        while (service.isTuitionIdExists(tuitionId)) {
+            System.out.println("Mã học phí '" + tuitionId + "' đã tồn tại!");
+            tuitionId = InputUtil.getNonEmptyString("Nhập mã học phí khác (TFxxxx): ");
+        }
+        
+        // Nhập mã học sinh với validation
+        String studentId = null;
+        StudentService studentService = StudentService.getInstance();
+        while (studentId == null || studentId.trim().isEmpty() || !studentService.isStudentIdExists(studentId)) {
+            if (studentId != null && !studentId.trim().isEmpty() && !studentService.isStudentIdExists(studentId)) {
+                System.out.println("Không tìm thấy học sinh có mã '" + studentId + "'!");
+            }
+            studentId = InputUtil.getNonEmptyString("Mã học sinh: ");
+        }
+        
+        // Nhập học kỳ với validation
+        int semester = 0;
+        while (semester < 1 || semester > 2) {
+            if (semester != 0) {
+                System.out.println("Học kỳ phải là 1 hoặc 2!");
+            }
+            semester = InputUtil.getInt("Học kỳ (1 hoặc 2): ");
+        }
+        
+        // Nhập năm học với validation
+        String schoolYear = null;
+        while (schoolYear == null || schoolYear.trim().isEmpty() || !schoolYear.matches("^\\d{4}-\\d{4}$")) {
+            if (schoolYear != null && !schoolYear.trim().isEmpty() && !schoolYear.matches("^\\d{4}-\\d{4}$")) {
+                System.out.println("Năm học sai định dạng! (VD: 2024-2025)");
+            }
+            schoolYear = InputUtil.getNonEmptyString("Năm học (YYYY-YYYY): ");
+        }
+        
+        // Kiểm tra năm học hợp lệ
+        String[] parts = schoolYear.split("-");
+        int startYear = Integer.parseInt(parts[0]);
+        int endYear = Integer.parseInt(parts[1]);
+        while (startYear > endYear) {
+            System.out.println("Năm học không hợp lệ! Năm bắt đầu phải <= năm kết thúc");
+            schoolYear = InputUtil.getNonEmptyString("Nhập lại năm học (YYYY-YYYY): ");
+            parts = schoolYear.split("-");
+            startYear = Integer.parseInt(parts[0]);
+            endYear = Integer.parseInt(parts[1]);
+        }
+        
+        // Nhập số tiền với validation
+        double amount = 0;
+        while (amount <= 0) {
+            if (amount != 0) {
+                System.out.println("Số tiền phải lớn hơn 0!");
+            }
+            amount = InputUtil.getDouble("Số tiền (VND, VD: 5000000): ");
+        }
+        
+        // Nhập ngày thu với validation
         LocalDate paymentDate = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         while (paymentDate == null) {
@@ -58,12 +117,47 @@ public class RecordTuitionScreen extends AbstractScreen {
             }
         }
         
-        String method = "";
+        // Nhập trạng thái
         String status = "";
+        int statusChoice = -1;
+        while (statusChoice < 0 || statusChoice > 1) {
+            if (statusChoice != -1) {
+                System.out.println("Lựa chọn không hợp lệ!");
+            }
+            System.out.println("\nChọn trạng thái học phí:");
+            System.out.println("0 - Chưa thu");
+            System.out.println("1 - Đã thu");
+            statusChoice = InputUtil.getInt("Nhập lựa chọn (0/1): ");
+            
+            switch (statusChoice) {
+                case 0 -> status = "CHƯA THU";
+                case 1 -> status = "ĐÃ THU";
+            }
+        }
+        
+        // Nhập phương thức thanh toán (chỉ khi đã thu)
+        String method = "";
+        if (status.equals("ĐÃ THU")) {
+            int methodChoice = -1;
+            while (methodChoice < 0 || methodChoice > 1) {
+                if (methodChoice != -1) {
+                    System.out.println("Lựa chọn không hợp lệ!");
+                }
+                System.out.println("\nChọn phương thức thanh toán:");
+                System.out.println("0 - Tiền mặt");
+                System.out.println("1 - Chuyển khoản");
+                methodChoice = InputUtil.getInt("Nhập lựa chọn (0/1): ");
+                
+                switch (methodChoice) {
+                    case 0 -> method = "TIỀN MẶT";
+                    case 1 -> method = "CHUYỂN KHOẢN";
+                }
+            }
+        }
+        
         String note = InputUtil.getString("Ghi chú (nếu có): ");
         
         // Gọi service để thêm học phí
-        TuitionService service = TuitionService.getInstance();
         boolean success = service.addTuition(tuitionId, studentId, semester, schoolYear, 
                                            amount, paymentDate, method, status, note);
         
