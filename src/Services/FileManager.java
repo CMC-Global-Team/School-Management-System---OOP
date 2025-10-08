@@ -52,5 +52,30 @@ public class FileManager {
         }
     }
     
-
+    /**
+     * Lấy đường dẫn file theo loại entity
+     * @param entityType Loại entity (classroom, student, teacher, ...)
+     * @return Đường dẫn file tương ứng
+     */
+    public static String getFilePath(String entityType) {
+        switch (entityType.toLowerCase()) {
+            case "classroom":
+                return CLASSROOM_FILE;
+            case "student":
+                return STUDENT_FILE;
+            case "teacher":
+                return TEACHER_FILE;
+            case "subject":
+                return SUBJECT_FILE;
+            case "grade":
+                return GRADE_FILE;
+            case "tuition":
+                return TUITION_FILE;
+            case "teaching_assignment":
+                return TEACHING_ASSIGNMENT_FILE;
+            default:
+                return DATA_DIR + "/" + entityType + ".txt";
+        }
+    }
+    
 }
