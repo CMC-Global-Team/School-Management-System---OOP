@@ -66,18 +66,9 @@ public class TuitionService {
             studentId = sc.nextLine().trim();
         }
 
-        //  3. Kiểm tra học sinh đã có học phí chưa (chỉ kiểm tra cùng học kỳ và năm học)
-        List<Tuition> existingTuitions = repository.findAll();
-        final String finalStudentId = studentId;
-        final int finalSemester = semester;
-        final String finalSchoolYear = schoolYear;
-        boolean hasTuition = existingTuitions.stream()
-                .anyMatch(t -> t.getStudentId().equalsIgnoreCase(finalStudentId) 
-                           && t.getSemester() == finalSemester 
-                           && t.getSchoolYear().equalsIgnoreCase(finalSchoolYear));
-
-        if (hasTuition) {
-            System.out.println("  Học sinh có mã '" + studentId + "' đã có học phí cho học kỳ " + semester + " năm học " + schoolYear + "!");
+        //  3. Kiểm tra mã học phí đã tồn tại chưa (cho phép học sinh có nhiều học phí)
+        if (isTuitionIdExists(tuitionId)) {
+            System.out.println("  Mã học phí '" + tuitionId + "' đã tồn tại trong hệ thống!");
             return false;
         }
 
