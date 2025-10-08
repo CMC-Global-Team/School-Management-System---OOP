@@ -40,5 +40,16 @@ public class InputUtil {
         return email;
     }
 
-   
+    public static int getInt(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Vui lòng nhập một số nguyên hợp lệ!");
+            }
+        }
+    }
+
+    
 }
