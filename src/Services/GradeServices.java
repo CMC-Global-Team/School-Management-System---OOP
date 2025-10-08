@@ -2,6 +2,7 @@ package Services;
 
 import Models.Grade;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GradeServices {
@@ -34,7 +35,7 @@ public class GradeServices {
      */
     public List<Grade> getAllGradeByStudentID(String studentID) {
         List<Grade> grades = getAllGrade();
-        List<Grade> studentGrades = getAllGrade();
+        List<Grade> studentGrades = new ArrayList<>();
         for (Grade grade : grades) {
             if(grade.getStudentId().equalsIgnoreCase(studentID)) {
                 studentGrades.add(grade);
@@ -48,9 +49,23 @@ public class GradeServices {
      */
     public List<Grade> getAllGradeBySubjectID(String subjectID, String studentID) {
         List<Grade> grades = getAllGradeByStudentID(studentID);
-        List<Grade> subjectGrades = getAllGrade();
+        List<Grade> subjectGrades = new ArrayList<>();
         for (Grade grade : grades) {
             if(grade.getSubjectId().equalsIgnoreCase(subjectID)) {
+                subjectGrades.add(grade);
+            }
+        }
+        return subjectGrades;
+    }
+
+    /**
+     * Lấy tất cả điểm theo học kỳ và năm học của 1 học sinh
+     */
+    public List<Grade> getAllGradeBySemester(int semester, String schoolYear, String studentID) {
+        List<Grade> grades = getAllGradeByStudentID(studentID);
+        List<Grade> subjectGrades = new ArrayList<>();
+        for (Grade grade : grades) {
+            if(grade.getSchoolYear().equalsIgnoreCase(schoolYear) && grade.getSemester() == semester) {
                 subjectGrades.add(grade);
             }
         }
