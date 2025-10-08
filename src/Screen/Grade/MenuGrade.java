@@ -13,7 +13,7 @@ public class MenuGrade extends AbstractScreen {
     private final AverageGradeScreen averageGradeScreen;
     private final GradeClassificationScreen gradeClassificationScreen;
     //private final ReportScreen reportScreen;
-    private final ExportScreen exportScreen;
+//    private final ExportScreen exportScreen;
 
     public MenuGrade() {
         super();
@@ -24,7 +24,7 @@ public class MenuGrade extends AbstractScreen {
         this.averageGradeScreen = new AverageGradeScreen();
         this.gradeClassificationScreen = new GradeClassificationScreen();
         //this.reportScreen = new ReportScreen();
-        this.exportScreen = new ExportScreen();
+        //this.exportScreen = new ExportScreen();
 
     }
     @Override
