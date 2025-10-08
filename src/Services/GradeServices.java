@@ -1,7 +1,9 @@
 package Services;
 
 import Models.Grade;
+import Utils.InputUtil;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,70 @@ public class GradeServices {
         }
         return instance;
     }
+
+    /**
+     * Thêm điểm mới
+     */
+    public boolean addGrade(String gradeID, String studentID, String subjectID, int gradeType) {
+
+        // Validate input
+        if (StudentService.getInstance().isStudentIdExists(studentID)) {
+            System.out.println("Không tìm thấy học sinh có mã: " + studentID);
+            return false;
+        }
+        if (SubjectService.getInstance().isSubjectIdExists(subjectID)) {
+            System.out.println("Không tìm thấy môn học có mã: " + subjectID);
+            return false;
+        }
+        if (isGradeIDExists(gradeID)) {
+            System.out.println("Mã điểm " + gradeID + " đã tồn tại!");
+            return false;
+        }
+        String type;
+        switch (gradeType) {
+            case 1:
+                type = "thuong xuyen";
+                break;
+            case 2:
+                type = "giua ky";
+                break;
+            case 3:
+                type = "cuoi ky";
+                break;
+            default:
+                System.out.println("Lựa chọn không hợp lệ!");
+                return false;
+        }
+
+        double score = -1;
+        while(score < 0 || score > 10) {
+            score = InputUtil.getDouble("Điểm số(0-10): ");
+        }
+        int gradeSemester = InputUtil.getInt("Học kỳ: ");
+        if(isExistGradeType(gradeSemester,subjectID, studentID, type)) {
+            System.out.println("Loại điểm này đã tồn tại!");
+            return false;
+        }
+        System.out.println("Năm học: ");
+        String gradeSchoolYear = schoolYearInput();
+        LocalDate inputDate =  LocalDate.now();
+        String gradeNote = InputUtil.getString("Ghi chú: ");
+
+        Grade grade = new Grade(gradeID, studentID, subjectID, type, score, gradeSemester, gradeSchoolYear, inputDate, gradeNote);
+        System.out.println(grade.toString());
+        if(!InputUtil.getBoolean("Bạn chắc chắn muốn lưu điểm này?")){
+            return false;
+        }
+        // Thêm vào repository
+        if (repository.add(grade)) {
+            System.out.println("✓ Thêm điểm thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể thêm điểm!");
+            return false;
+        }
+    }
+
 
     /**
      * Tìm điểm theo mã học sinh
