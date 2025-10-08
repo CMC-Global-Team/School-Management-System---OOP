@@ -299,5 +299,35 @@ public class StudentService {
         return exportStudentsToFile(filename, getAllStudents());
     }
 
-    
+    /**
+     * Hiển thị kết quả lọc
+     */
+    public void displayFilterResults(List<Student> students, String filterType) {
+        if (students.isEmpty()) {
+            System.out.println("\nKhông có học sinh nào phù hợp với tiêu chí lọc.");
+            return;
+        }
+
+        System.out.println("\n┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                    KẾT QUẢ LỌC " + filterType.toUpperCase() + "                                    │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-10s %-25s %-15s %-10s %-10s %-10s │%n", "Mã HS", "Họ Tên", "Ngày Sinh", "Giới Tính", "Lớp", "Trạng Thái");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+
+        for (Student student : students) {
+            System.out.printf("│ %-10s %-25s %-15s %-10s %-10s %-10s │%n",
+                    truncate(student.getId(), 10),
+                    truncate(student.getName(), 25),
+                    student.getDateOfBirth(),
+                    truncate(student.getGender(), 10),
+                    truncate(student.getClassName(), 10),
+                    truncate(student.getStatus(), 10)
+            );
+        }
+
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+        System.out.println("Tìm thấy: " + students.size() + " học sinh");
+    }
+
+
 }
