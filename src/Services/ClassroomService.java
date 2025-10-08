@@ -174,5 +174,34 @@ public class ClassroomService {
         System.out.println("Tổng số lớp: " + classes.size());
     }
     
+    /**
+     * Hiển thị kết quả tìm kiếm
+     */
+    public void displaySearchResults(String keyword) {
+        List<Classroom> results = searchClasses(keyword);
+        
+        if (results.isEmpty()) {
+            System.out.println("\nKhông tìm thấy lớp học nào phù hợp với từ khóa: '" + keyword + "'");
+            return;
+        }
+        
+        System.out.println("\n┌───────────────────────────────────────────────────────────────┐");
+        System.out.println("│                  KẾT QUẢ TÌM KIẾM                             │");
+        System.out.println("├───────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-10s %-25s %-15s %-10s │%n", "Mã Lớp", "Tên Lớp", "Năm Học", "Niên Khóa");
+        System.out.println("├───────────────────────────────────────────────────────────────┤");
+        
+        for (Classroom classroom : results) {
+            System.out.printf("│ %-10s %-25s %-15s %-10s │%n",
+                truncate(classroom.getClassId(), 10),
+                truncate(classroom.getClassName(), 25),
+                truncate(classroom.getSchoolYear(), 15),
+                truncate(classroom.getCourse(), 10)
+            );
+        }
+        
+        System.out.println("└─────────────────────────────────────────────────────────────────────┘");
+        System.out.println("Tìm thấy: " + results.size() + " lớp học");
+    }
     
 }
