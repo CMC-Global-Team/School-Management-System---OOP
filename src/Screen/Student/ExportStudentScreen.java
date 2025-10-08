@@ -23,6 +23,7 @@ public class ExportStudentScreen extends AbstractScreen {
         System.out.println("│  3. Xuất học sinh theo trạng thái         │");
         System.out.println("│  4. Xuất học sinh theo giới tính          │");
         System.out.println("│  5. Xuất học sinh theo nhiều tiêu chí     │");
+        System.out.println("│  6. Xem thông tin chi tiết các lớp        │");
         System.out.println("│  0. Quay lại menu học sinh                │");
         System.out.println("└──────────────────────────────────────────┘");
     }
@@ -50,6 +51,9 @@ public class ExportStudentScreen extends AbstractScreen {
                     break;
                 case 5:
                     exportByMultipleCriteria();
+                    break;
+                case 6:
+                    displayClassDetails();
                     break;
                 case 0:
                     System.out.println("\nĐang quay lại menu học sinh...");
@@ -104,23 +108,46 @@ public class ExportStudentScreen extends AbstractScreen {
         System.out.println("│       XUẤT THEO LỚP                      │");
         System.out.println("└──────────────────────────────────────────┘");
 
-        String className = input("Nhập tên lớp cần xuất: ");
+        // Hiển thị danh sách các lớp có sẵn từ cả hai nguồn
+        System.out.println("\n=== DANH SÁCH CÁC LỚP HIỆN CÓ ===");
+        System.out.println("(Lấy từ cả classrooms.txt và students.txt)");
+        studentService.displayAllClasses();
+        
+        System.out.println("\n=== CHỌN LỚP CẦN XUẤT ===");
+        System.out.println("Nhập tên lớp từ danh sách trên:");
+        String className = input("Tên lớp: ");
+        
         if (className.trim().isEmpty()) {
             System.out.println("Tên lớp không được để trống!");
             pause();
             return;
         }
 
-        List<Student> filteredStudents = studentService.filterByClass(className);
+        // Kiểm tra lớp có tồn tại không (từ cả hai nguồn)
+        List<String> availableClasses = studentService.getAllClassNamesFromBothSources();
+        boolean classExists = availableClasses.stream()
+                .anyMatch(cls -> cls.equalsIgnoreCase(className.trim()));
         
-        if (filteredStudents.isEmpty()) {
-            System.out.println("Không tìm thấy học sinh nào trong lớp: " + className);
+        if (!classExists) {
+            System.out.println("Lớp '" + className + "' không tồn tại trong hệ thống!");
+            System.out.println("Vui lòng chọn lớp từ danh sách trên.");
             pause();
             return;
         }
 
-        System.out.println("Tìm thấy " + filteredStudents.size() + " học sinh trong lớp: " + className);
-        System.out.println("Bạn có muốn xuất danh sách này ra file không? (y/n): ");
+        List<Student> filteredStudents = studentService.filterByClass(className.trim());
+        
+        if (filteredStudents.isEmpty()) {
+            System.out.println("Không có học sinh nào trong lớp: " + className);
+            pause();
+            return;
+        }
+
+        // Hiển thị danh sách học sinh sẽ được xuất
+        System.out.println("\n=== DANH SÁCH HỌC SINH SẼ XUẤT ===");
+        studentService.displayStudentsByClass(className.trim());
+        
+        System.out.println("\nBạn có muốn xuất danh sách này ra file không? (y/n): ");
         String confirm = scanner.nextLine().trim().toLowerCase();
         
         if (!confirm.equals("y") && !confirm.equals("yes")) {
@@ -245,7 +272,23 @@ public class ExportStudentScreen extends AbstractScreen {
 
         System.out.println("Nhập thông tin lọc (để trống nếu không muốn lọc theo tiêu chí đó):");
         
-        String className = input("Tên lớp: ");
+        // Hiển thị danh sách lớp để tham khảo từ cả hai nguồn
+        System.out.println("\n=== DANH SÁCH CÁC LỚP HIỆN CÓ ===");
+        System.out.println("(Lấy từ cả classrooms.txt và students.txt)");
+        studentService.displayAllClasses();
+        
+        System.out.println("\n=== DANH SÁCH TRẠNG THÁI CÓ THỂ CÓ ===");
+        System.out.println("- Đang học");
+        System.out.println("- Nghỉ học");
+        System.out.println("- Chuyển lớp");
+        System.out.println("- Tốt nghiệp");
+        
+        System.out.println("\n=== DANH SÁCH GIỚI TÍNH CÓ THỂ CÓ ===");
+        System.out.println("- Nam");
+        System.out.println("- Nữ");
+        
+        System.out.println("\n=== NHẬP TIÊU CHÍ LỌC ===");
+        String className = input("Tên lớp (từ danh sách trên): ");
         String status = input("Trạng thái: ");
         String gender = input("Giới tính: ");
 
@@ -256,7 +299,21 @@ public class ExportStudentScreen extends AbstractScreen {
             return;
         }
 
-        List<Student> filteredStudents = studentService.filterStudents(className, status, gender);
+        // Kiểm tra lớp có tồn tại không (nếu được nhập) - từ cả hai nguồn
+        if (!className.trim().isEmpty()) {
+            List<String> availableClasses = studentService.getAllClassNamesFromBothSources();
+            boolean classExists = availableClasses.stream()
+                    .anyMatch(cls -> cls.equalsIgnoreCase(className.trim()));
+            
+            if (!classExists) {
+                System.out.println("Lớp '" + className + "' không tồn tại trong hệ thống!");
+                System.out.println("Vui lòng chọn lớp từ danh sách trên.");
+                pause();
+                return;
+            }
+        }
+
+        List<Student> filteredStudents = studentService.filterStudents(className.trim(), status.trim(), gender.trim());
         
         if (filteredStudents.isEmpty()) {
             System.out.println("Không tìm thấy học sinh nào phù hợp với tiêu chí đã nhập!");
@@ -265,12 +322,17 @@ public class ExportStudentScreen extends AbstractScreen {
         }
 
         String filterDescription = "theo tiêu chí";
-        if (!className.trim().isEmpty()) filterDescription += " - Lớp: " + className;
-        if (!status.trim().isEmpty()) filterDescription += " - Trạng thái: " + status;
-        if (!gender.trim().isEmpty()) filterDescription += " - Giới tính: " + gender;
+        if (!className.trim().isEmpty()) filterDescription += " - Lớp: " + className.trim();
+        if (!status.trim().isEmpty()) filterDescription += " - Trạng thái: " + status.trim();
+        if (!gender.trim().isEmpty()) filterDescription += " - Giới tính: " + gender.trim();
 
+        System.out.println("\n=== DANH SÁCH HỌC SINH SẼ XUẤT ===");
         System.out.println("Tìm thấy " + filteredStudents.size() + " học sinh " + filterDescription);
-        System.out.println("Bạn có muốn xuất danh sách này ra file không? (y/n): ");
+        
+        // Hiển thị danh sách học sinh sẽ được xuất
+        studentService.displayFilterResults(filteredStudents, "xuất file");
+        
+        System.out.println("\nBạn có muốn xuất danh sách này ra file không? (y/n): ");
         String confirm = scanner.nextLine().trim().toLowerCase();
         
         if (!confirm.equals("y") && !confirm.equals("yes")) {
@@ -288,6 +350,28 @@ public class ExportStudentScreen extends AbstractScreen {
             System.out.println("Lỗi khi xuất file!");
         }
 
+        pause();
+    }
+
+    /**
+     * Hiển thị thông tin chi tiết về các lớp
+     */
+    private void displayClassDetails() {
+        clearScreen();
+        System.out.println("┌──────────────────────────────────────────┐");
+        System.out.println("│       THÔNG TIN CHI TIẾT CÁC LỚP          │");
+        System.out.println("└──────────────────────────────────────────┘");
+
+        System.out.println("\n=== THÔNG TIN CHI TIẾT CÁC LỚP ===");
+        System.out.println("Hiển thị thông tin từ cả classrooms.txt và students.txt:");
+        
+        studentService.displayAllClassesDetailed();
+        
+        System.out.println("\n=== GIẢI THÍCH ===");
+        System.out.println("- Có trong Classroom: Lớp được định nghĩa trong file classrooms.txt");
+        System.out.println("- Có trong Student: Lớp có học sinh trong file students.txt");
+        System.out.println("- Số HS: Số lượng học sinh hiện tại trong lớp");
+        
         pause();
     }
 }

@@ -1,9 +1,13 @@
 package Services;
 
+import Models.Classroom;
 import Models.Student;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * StudentService - Service layer cho business logic của Student
@@ -14,9 +18,11 @@ public class StudentService {
 
     private static StudentService instance;
     private final StudentRepository repository;
+    private final ClassroomService classroomService;
 
     private StudentService() {
         this.repository = new StudentRepository();
+        this.classroomService = ClassroomService.getInstance();
     }
 
     /**
@@ -426,12 +432,45 @@ public class StudentService {
     }
 
     /**
-     * Hiển thị danh sách các lớp
+     * Lấy danh sách tất cả các lớp từ cả classrooms.txt và students.txt
+     */
+    public List<String> getAllClassNamesFromBothSources() {
+        // Lấy danh sách lớp từ classrooms.txt
+        List<String> classroomNames = classroomService.getAllClasses().stream()
+                .map(Classroom::getClassName)
+                .collect(Collectors.toList());
+        
+        // Lấy danh sách lớp từ students.txt
+        List<String> studentClassNames = repository.findAll().stream()
+                .map(Student::getClassName)
+                .distinct()
+                .collect(Collectors.toList());
+        
+        // Kết hợp và loại bỏ trùng lặp
+        Map<String, String> allClasses = new HashMap<>();
+        
+        // Thêm lớp từ classrooms.txt
+        for (String className : classroomNames) {
+            allClasses.put(className, className);
+        }
+        
+        // Thêm lớp từ students.txt
+        for (String className : studentClassNames) {
+            allClasses.put(className, className);
+        }
+        
+        return allClasses.values().stream()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Hiển thị danh sách các lớp với thống kê từ cả hai nguồn
      */
     public void displayAllClasses() {
-        List<String> classes = getAllClassNames();
+        List<String> allClasses = getAllClassNamesFromBothSources();
 
-        if (classes.isEmpty()) {
+        if (allClasses.isEmpty()) {
             System.out.println("\nKhông có lớp nào trong hệ thống.");
             return;
         }
@@ -440,12 +479,50 @@ public class StudentService {
         System.out.println("│              DANH SÁCH CÁC LỚP            │");
         System.out.println("├──────────────────────────────────────────┤");
 
-        for (String className : classes) {
+        for (String className : allClasses) {
             int studentCount = getStudentsByClass(className).size();
             System.out.printf("│ %-20s (%d học sinh)        │%n", className, studentCount);
         }
 
         System.out.println("└──────────────────────────────────────────┘");
+    }
+
+    /**
+     * Hiển thị danh sách các lớp với thông tin chi tiết từ cả hai nguồn
+     */
+    public void displayAllClassesDetailed() {
+        List<String> allClasses = getAllClassNamesFromBothSources();
+
+        if (allClasses.isEmpty()) {
+            System.out.println("\nKhông có lớp nào trong hệ thống.");
+            return;
+        }
+
+        System.out.println("\n┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                    DANH SÁCH CÁC LỚP CHI TIẾT                            │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-20s %-15s %-15s %-10s │%n", "Tên Lớp", "Có trong Classroom", "Có trong Student", "Số HS");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+
+        for (String className : allClasses) {
+            // Kiểm tra lớp có trong classrooms.txt không
+            boolean inClassroom = classroomService.getAllClasses().stream()
+                    .anyMatch(cls -> cls.getClassName().equals(className));
+            
+            // Kiểm tra lớp có học sinh không
+            boolean hasStudents = !getStudentsByClass(className).isEmpty();
+            
+            int studentCount = getStudentsByClass(className).size();
+            
+            System.out.printf("│ %-20s %-15s %-15s %-10s │%n",
+                    className,
+                    inClassroom ? "Có" : "Không",
+                    hasStudents ? "Có" : "Không",
+                    studentCount
+            );
+        }
+
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     /**
