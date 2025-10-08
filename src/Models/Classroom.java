@@ -66,4 +66,30 @@ public class Classroom implements IEntity {
         return true;
     }
     
+    /**
+     * Tạo Classroom object từ chuỗi trong file
+     * Format: classId,className,schoolYear,course
+     */
+    public static Classroom fromString(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
+        
+        String[] parts = line.split(",");
+        if (parts.length < 4) {
+            return null;
+        }
+        
+        try {
+            String classId = parts[0].trim();
+            String className = parts[1].trim();
+            String schoolYear = parts[2].trim();
+            String course = parts[3].trim();
+            
+            return new Classroom(classId, className, schoolYear, course);
+        } catch (Exception e) {
+            System.err.println("Lỗi parse Classroom: " + e.getMessage());
+            return null;
+        }
+    }
 }
