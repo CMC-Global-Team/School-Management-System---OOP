@@ -55,5 +55,19 @@ public class AverageGradeScreen extends AbstractScreen{
         System.out.printf("Điểm trung bình: %.2f", finalAverageGrade);
         pause();
     }
-
+    public static Double getSubjectCoefficientsBySubjectID(String subjectIDs){
+        try {
+            List<String> lines = FileUtil.readLines("src/Data/subjects.txt");
+            for (String line : lines) {
+                Subject s = Subject.fromString(line);
+                if (s != null && (s.getSubjectID().equalsIgnoreCase(subjectIDs))) {
+                    return s.getConfficient();
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Lỗi khi tìm kiếm hệ số của môn học: " + e.getMessage());
+        }
+        return 0.0;
+    }
+    
 }
