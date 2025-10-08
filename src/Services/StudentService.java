@@ -59,7 +59,7 @@ public class StudentService {
 
         // Thêm vào repository
         if (repository.add(student)) {
-            System.out.println("✓ Thêm học sinh thành công!");
+            System.out.println("Thêm học sinh thành công!");
             return true;
         } else {
             System.out.println("Lỗi: Không thể thêm học sinh!");
@@ -82,7 +82,7 @@ public class StudentService {
         }
 
         if (repository.update(student)) {
-            System.out.println("✓ Cập nhật học sinh thành công!");
+            System.out.println("Cập nhật học sinh thành công!");
             return true;
         } else {
             System.out.println("Lỗi: Không thể cập nhật học sinh!");
@@ -105,7 +105,7 @@ public class StudentService {
         }
 
         if (repository.delete(id)) {
-            System.out.println("✓ Xóa học sinh thành công!");
+            System.out.println("Xóa học sinh thành công!");
             return true;
         } else {
             System.out.println("Lỗi: Không thể xóa học sinh!");
@@ -211,15 +211,13 @@ public class StudentService {
     }
 
     /**
-     * Helper method để cắt chuỗi cho vừa với độ rộng
+     * Lọc học sinh theo lớp
      */
-    private String truncate(String str, int maxLength) {
-        if (str == null) {
-            return "";
-        }
-        if (str.length() <= maxLength) {
-            return str;
-        }
-        return str.substring(0, maxLength - 3) + "...";
+    public List<Student> filterByClass(String className) {
+        return repository.findAll().stream()
+                .filter(student -> student.getClassName().equalsIgnoreCase(className))
+                .collect(java.util.stream.Collectors.toList());
     }
+
+    
 }
