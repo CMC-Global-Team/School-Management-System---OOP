@@ -88,6 +88,28 @@ public class GradeServices {
         }
     }
 
+    /**
+     * Cập nhật điểm
+     */
+    public boolean updateGrade(Grade Grade) {
+        if (Grade == null) {
+            System.out.println("Lỗi: Grade không được null!");
+            return false;
+        }
+
+        if (!repository.exists(Grade.getGradeId())) {
+            System.out.println("Lỗi: Không tìm thấy điểm với mã '" + Grade.getGradeId() + "'!");
+            return false;
+        }
+
+        if (repository.update(Grade)) {
+            System.out.println("✓ Cập nhật điểm thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể cập nhật điểm!");
+            return false;
+        }
+    }
 
     /**
      * Tìm điểm theo mã học sinh
@@ -149,5 +171,14 @@ public class GradeServices {
             }
         }
         return false;
+    }
+
+    /**
+     * Nhập Năm học
+     */
+    public static String schoolYearInput(){
+        int start = InputUtil.getInt("Năm bắt đầu: ");
+        int end = InputUtil.getInt("Năm kết thúc: ");
+        return start + " - " + end;
     }
 }
