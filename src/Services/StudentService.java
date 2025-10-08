@@ -329,5 +329,16 @@ public class StudentService {
         System.out.println("Tìm thấy: " + students.size() + " học sinh");
     }
 
-
+    /**
+     * Helper method để cắt chuỗi cho vừa với độ rộng
+     */
+    private String truncate(String str, int maxLength) {
+        if (str == null) {
+            return "";
+        }
+        if (str.length() <= maxLength) {
+            return str;
+        }
+        return str.substring(0, maxLength - 3) + "...";
+    }
 }
