@@ -8,6 +8,8 @@ public class StudentMenu extends AbstractScreen {
     private final DeleteStudentScreen deleteScreen;
     private final SearchStudentScreen searchScreen;
     private final ListStudentScreen listScreen;
+    private final FilterStudentScreen filterScreen;
+    private final ExportStudentScreen exportScreen;
 
     public StudentMenu() {
         super();
@@ -16,6 +18,8 @@ public class StudentMenu extends AbstractScreen {
         this.deleteScreen = new DeleteStudentScreen();
         this.searchScreen = new SearchStudentScreen();
         this.listScreen = new ListStudentScreen();
+        this.filterScreen = new FilterStudentScreen();
+        this.exportScreen = new ExportStudentScreen();
     }
 
     @Override
@@ -28,6 +32,8 @@ public class StudentMenu extends AbstractScreen {
         System.out.println("│  3. Cập Nhật Thông Tin Học Sinh          │");
         System.out.println("│  4. Xóa Học Sinh                         │");
         System.out.println("│  5. Danh Sách Tất Cả Học Sinh            │");
+        System.out.println("│  6. Lọc Học Sinh                         │");
+        System.out.println("│  7. Xuất Danh Sách Học Sinh              │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
     }
@@ -61,6 +67,14 @@ public class StudentMenu extends AbstractScreen {
                 case 5:
                     listScreen.display();
                     listScreen.handleInput();
+                    break;
+                case 6:
+                    filterScreen.display();
+                    filterScreen.handleInput();
+                    break;
+                case 7:
+                    exportScreen.display();
+                    exportScreen.handleInput();
                     break;
                 case 0:
                     System.out.println("\nDang quay lai menu chinh...");
