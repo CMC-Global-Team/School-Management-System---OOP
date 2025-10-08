@@ -34,6 +34,6 @@ public class AverageGradeScreen extends AbstractScreen{
         }else {
             System.out.println("Không tìm thấy mã học sinh: " + studentID);
         }
-
+        pause();
     }
 }
