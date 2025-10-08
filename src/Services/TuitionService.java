@@ -316,4 +316,11 @@ public class TuitionService {
         }
     }
 
+    /**
+     * Tìm học phí theo ID
+     */
+    public Optional<Tuition> findById(String tuitionId) {
+        return repository.findById(tuitionId);
+    }
+
 }
