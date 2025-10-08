@@ -20,7 +20,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         System.out.println("- Mã học phí: Định dạng TFxxxx (VD: TF0001)");
         System.out.println("- Mã học sinh: Phải tồn tại trong hệ thống");
         System.out.println("- Năm học: Định dạng YYYY-YYYY (VD: 2024-2025)");
-        System.out.println("- Số tiền: Nhập theo nghìn đồng (VD: 5 = 5,000 VND)");
+        System.out.println("- Số tiền: Nhập số nguyên (VD: 5000000 = 5,000,000 VND)");
         System.out.println("- Ngày thu: Định dạng dd/MM/yyyy (VD: 09/10/2024)");
         System.out.println("- Trạng thái: 0=Chưa thu, 1=Đã thu");
         System.out.println("- Phương thức: 0=Tiền mặt, 1=Chuyển khoản");
@@ -39,7 +39,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         String studentId = InputUtil.getNonEmptyString("Mã học sinh: ");
         int semester = InputUtil.getInt("Học kỳ (1 hoặc 2): ");
         String schoolYear = InputUtil.getNonEmptyString("Năm học (YYYY-YYYY): ");
-        double amount = InputUtil.getDouble("Số tiền (nghìn đồng): ");
+        double amount = InputUtil.getDouble("Số tiền (VND, VD: 5000000): ");
         
         // Nhập ngày thu
         LocalDate paymentDate = null;

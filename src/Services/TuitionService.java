@@ -107,11 +107,8 @@ public class TuitionService {
             }
         }
 
-// Nhân thêm 1000 để ra số thực tế
-        amount *= 1000;
-
-//  Hiển thị ra với dấu chấm phân cách hàng nghìn
-        System.out.println("→ Số tiền thực thu: " + df.format(amount));
+// Hiển thị số tiền với dấu chấm phân cách hàng nghìn
+        System.out.println("→ Số tiền thu: " + df.format(amount) + " VND");
 
         //  6. Kiểm tra ngày thu không được lớn hơn hôm nay
         while (paymentDate == null || paymentDate.isAfter(LocalDate.now())) {
