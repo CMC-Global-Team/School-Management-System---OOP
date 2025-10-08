@@ -243,4 +243,59 @@ public class TeacherService {
         if (str.length() <= maxLength) return str;
         return str.substring(0, maxLength - 3) + "...";
     }
+
+    /**
+     * Xuất danh sách giáo viên ra file
+     * @param filePath Đường dẫn file xuất
+     * @param teachers Danh sách giáo viên cần xuất
+     * @return true nếu xuất thành công, false nếu thất bại
+     */
+    public boolean exportTeachersToFile(String filePath, List<Teacher> teachers) {
+        if (teachers == null || teachers.isEmpty()) {
+            System.out.println("Không có dữ liệu để xuất!");
+            return false;
+        }
+
+        try (java.io.BufferedWriter bw = new java.io.BufferedWriter(new java.io.FileWriter(filePath, java.nio.charset.StandardCharsets.UTF_8))) {
+            // Ghi header
+            bw.write("DANH SÁCH GIÁO VIÊN");
+            bw.newLine();
+            bw.write("Ngày xuất: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+            bw.newLine();
+            bw.write("Tổng số: " + teachers.size() + " giáo viên");
+            bw.newLine();
+            bw.newLine();
+            
+            // Ghi tiêu đề cột
+            bw.write("Mã GV\tTên\tGiới tính\tNgày sinh\tĐịa chỉ\tSĐT\tEmail\tMôn dạy\tLớp CN");
+            bw.newLine();
+            bw.write("=".repeat(100));
+            bw.newLine();
+            
+            // Ghi dữ liệu
+            for (Teacher teacher : teachers) {
+                String subjects = teacher.getTeacherSubjects().isEmpty() ? "Chưa có" : String.join(", ", teacher.getTeacherSubjects());
+                String homeroom = (teacher.getTeacherHomeroom() == null || teacher.getTeacherHomeroom().isEmpty()) ? "Chưa có" : teacher.getTeacherHomeroom();
+                String birthDate = teacher.getBirthDate() != null ? teacher.getBirthDate().toString() : "N/A";
+                
+                bw.write(String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
+                    teacher.getId(),
+                    teacher.getName(),
+                    teacher.getGender(),
+                    birthDate,
+                    teacher.getAddress(),
+                    teacher.getPhoneNumber(),
+                    teacher.getEmail(),
+                    subjects,
+                    homeroom
+                ));
+                bw.newLine();
+            }
+            
+            return true;
+        } catch (Exception e) {
+            System.out.println("Lỗi khi xuất file: " + e.getMessage());
+            return false;
+        }
+    }
 }
