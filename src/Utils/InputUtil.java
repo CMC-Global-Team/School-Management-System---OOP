@@ -13,4 +13,17 @@ public class InputUtil {
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
+
+    public static String getNonEmptyString(String prompt) {
+        String input;
+        do {
+            input = getString(prompt);
+            if (input.isEmpty()) {
+                System.out.println("Vui lòng nhập giá trị hợp lệ!");
+            }
+        } while (input.isEmpty());
+        return input;
+    }
+
+    
 }
