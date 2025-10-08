@@ -357,4 +357,11 @@ public class TuitionService {
     public int getTotalTuitions() {
         return repository.count();
     }
+
+
+    private String truncate(String str, int maxLength) {
+        if (str == null) return "";
+        if (str.length() <= maxLength) return str;
+        return str.substring(0, maxLength - 3) + "...";
+    }
 }
