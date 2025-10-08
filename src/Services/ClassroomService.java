@@ -28,5 +28,40 @@ public class ClassroomService {
         return instance;
     }
     
-
+    /**
+     * Thêm lớp học mới
+     */
+    public boolean addClass(String classId, String className, String schoolYear, String course) {
+        
+        // Validate input
+        if (classId == null || classId.trim().isEmpty()) {
+            System.out.println("Lỗi: Mã lớp không được để trống!");
+            return false;
+        }
+        
+        if (className == null || className.trim().isEmpty()) {
+            System.out.println("Lỗi: Tên lớp không được để trống!");
+            return false;
+        }
+        
+        // Kiểm tra ID đã tồn tại
+        if (repository.exists(classId)) {
+            System.out.println("Lỗi: Mã lớp '" + classId + "' đã tồn tại!");
+            return false;
+        }
+        
+        // Tạo classroom mới
+        Classroom classroom = new Classroom(classId, className, schoolYear, course);
+        
+        // Thêm vào repository
+        if (repository.add(classroom)) {
+            System.out.println("✓ Thêm lớp học thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể thêm lớp học!");
+            return false;
+        }
+    }
+    
+   
 }
