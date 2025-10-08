@@ -1,6 +1,8 @@
 package Services;
 
 import Models.Grade;
+import Screen.Grade.DeleteGradeScreen;
+import Screen.Grade.SearchForStudentGradesScreen;
 import Utils.InputUtil;
 
 import java.time.LocalDate;
@@ -40,7 +42,7 @@ public class GradeServices {
             System.out.println("Không tìm thấy môn học có mã: " + subjectID);
             return false;
         }
-        if (isGradeIDExists(gradeID)) {
+        if (repository.exists(gradeID)) {
             System.out.println("Mã điểm " + gradeID + " đã tồn tại!");
             return false;
         }
@@ -263,5 +265,48 @@ public class GradeServices {
             return str;
         }
         return str.substring(0, maxLength - 3) + "...";
+    }
+
+    public void AverageScore(String studentID){
+        List<Grade> gradesStudent = getAllGradeByStudentID(studentID);
+        double averageGrade = 0;
+        double coefficient = 0;
+        while(!gradesStudent.isEmpty()){
+            Grade firstG = gradesStudent.get(0);
+            double r = 0;
+            if(firstG != null){
+                List<Grade> gradeSubject = getAllGradeBySubjectID(firstG.getSubjectId(), studentID);
+                if(!gradeSubject.isEmpty()) {
+                    for (Grade g : gradeSubject) {
+                        r = 0;
+                        if (g != null && g.getGradeType().equalsIgnoreCase("thuong xuyen")) {
+                            r += g.getScore() * 20;
+                        }
+                        if (g != null && g.getGradeType().equalsIgnoreCase("giua ky")) {
+                            r += g.getScore() * 30;
+                        }
+                        if (g != null && g.getGradeType().equalsIgnoreCase("cuoi ky")) {
+                            r += g.getScore() * 50;
+                        }
+                    }
+                    r = r / 100;
+                    System.out.println("Điểm trung bình môn " + firstG.getSubjectId() + ": " + r);
+                    averageGrade = r * SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
+                    coefficient += SubjectService.getInstance().findById(firstG.getSubjectId()).get().getConfficient();
+                }
+                gradesStudent = remove(gradesStudent, firstG.getSubjectId());
+            }
+        }
+        double finalAverageGrade = averageGrade / coefficient;
+        System.out.println("Điểm trung bình: " + finalAverageGrade);
+    }
+    private List<Grade> remove(List<Grade> grades, String subjectID){
+        List<Grade> results = new ArrayList<>();
+        for (Grade grade : grades) {
+            if(grade != null && !grade.getSubjectId().equals(subjectID)) {
+                results.add(grade);
+            }
+        }
+        return results;
     }
 }
