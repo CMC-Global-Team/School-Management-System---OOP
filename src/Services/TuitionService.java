@@ -503,4 +503,36 @@ public class TuitionService {
         }
     }
 
+    /**
+     * Xóa học phí theo mã
+     * @param tuitionId Mã học phí
+     * @return true nếu xóa thành công, false nếu thất bại
+     */
+    public boolean removeTuition(String tuitionId) {
+        if (tuitionId == null || tuitionId.trim().isEmpty()) {
+            System.out.println("Lỗi: Mã học phí không được để trống!");
+            return false;
+        }
+
+        if (!repository.exists(tuitionId)) {
+            System.out.println("Lỗi: Không tìm thấy học phí với mã '" + tuitionId + "'!");
+            return false;
+        }
+
+        Optional<Tuition> optionalTuition = repository.findById(tuitionId);
+        if (optionalTuition.isPresent()) {
+            Tuition t = optionalTuition.get();
+            System.out.println("→ Xóa học phí của học sinh: " + t.getStudentId() +
+                    " | Số tiền: " + String.format("%,.0f", t.getAmount()) + " VND");
+        }
+
+        if (repository.delete(tuitionId)) {
+            System.out.println("Xóa học phí thành công!");
+            return true;
+        } else {
+            System.out.println("Lỗi: Không thể xóa học phí!");
+            return false;
+        }
+    }
+
 }
