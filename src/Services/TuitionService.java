@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
+import Models.TuitionReport;
 
 public class TuitionService {
     private static TuitionService instance;
@@ -419,5 +420,50 @@ public class TuitionService {
         }
     }
 
+
+    /**
+     * Tạo báo cáo tài chính theo năm học (nếu filterYear=null hoặc "" thì lấy tất cả)
+     */
+    public TuitionReport generateFinancialReport(String filterYear) {
+        List<Tuition> tuitions = getAllTuitions();
+        TuitionReport report = new TuitionReport();
+
+        for (Tuition t : tuitions) {
+            if (t == null) continue;
+            if (filterYear != null && !filterYear.isEmpty() && !t.getSchoolYear().equalsIgnoreCase(filterYear)) {
+                continue;
+            }
+
+            //  Kiểm tra phần trăm miễn giảm trong ghi chú
+            double discountPercent = 0;
+            if (t.getNote() != null && t.getNote().toLowerCase().contains("miễn giảm")) {
+                try {
+                    for (String part : t.getNote().split(" ")) {
+                        if (part.endsWith("%")) {
+                            discountPercent = Double.parseDouble(part.replace("%", ""));
+                            break;
+                        }
+                    }
+                } catch (Exception ignored) {}
+            }
+
+            double discountAmount = t.getAmount() * (discountPercent / 100);
+            String status = t.getStatus().trim().toLowerCase();
+
+            if (status.equals("đã đóng") || status.equals("đã thu")) {
+                report.totalPaid += (t.getAmount() - discountAmount);
+                report.totalDiscount += discountAmount;
+                report.countPaid++;
+            } else if (status.equals("chưa đóng") || status.equals("chưa thu")) {
+                report.totalUnpaid += t.getAmount();
+                report.countUnpaid++;
+            }
+        }
+
+        report.expectedRevenue = report.totalPaid + report.totalUnpaid;
+        report.actualRevenue = report.totalPaid;
+
+        return report;
+    }
 
 }
