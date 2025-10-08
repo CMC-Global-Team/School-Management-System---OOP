@@ -1,8 +1,8 @@
 package Services;
 
 import Models.Tuition;
+import Models.TuitionReport;
 import Utils.InputUtil;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
-import Models.TuitionReport;
 
 public class TuitionService {
     private static TuitionService instance;
@@ -69,11 +68,13 @@ public class TuitionService {
 
         //  3. Kiểm tra học sinh đã có học phí chưa (chỉ kiểm tra cùng học kỳ và năm học)
         List<Tuition> existingTuitions = repository.findAll();
-        String finalStudentId = studentId;
+        final String finalStudentId = studentId;
+        final int finalSemester = semester;
+        final String finalSchoolYear = schoolYear;
         boolean hasTuition = existingTuitions.stream()
                 .anyMatch(t -> t.getStudentId().equalsIgnoreCase(finalStudentId) 
-                           && t.getSemester() == semester 
-                           && t.getSchoolYear().equalsIgnoreCase(schoolYear));
+                           && t.getSemester() == finalSemester 
+                           && t.getSchoolYear().equalsIgnoreCase(finalSchoolYear));
 
         if (hasTuition) {
             System.out.println("  Học sinh có mã '" + studentId + "' đã có học phí cho học kỳ " + semester + " năm học " + schoolYear + "!");
