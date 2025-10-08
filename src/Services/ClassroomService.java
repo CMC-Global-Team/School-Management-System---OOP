@@ -109,5 +109,12 @@ public class ClassroomService {
         }
     }
     
+    /**
+     * Tìm lớp học theo ID
+     */
+    public Optional<Classroom> findById(String classId) {
+        return repository.findById(classId);
+    }
     
+
 }
