@@ -89,4 +89,27 @@ public class InputUtil {
         }
     }
 
+    public static boolean getBoolean(String prompt) {
+        while (true) {
+            String input = getString(prompt + " (y/n): ").toLowerCase();
+            if (input.equals("y") || input.equals("yes") || input.equals("true")) {
+                return true;
+            } else if (input.equals("n") || input.equals("no") || input.equals("false")) {
+                return false;
+            } else {
+                System.out.println("Vui lòng nhập y hoặc n!");
+            }
+        }
+    }
+
+    public static void pressEnterToContinue() {
+        System.out.println("Nhấn Enter để tiếp tục...");
+        scanner.nextLine();
+    }
+
+    public static void clearScreen() {
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
+    }
 }
