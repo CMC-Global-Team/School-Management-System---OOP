@@ -4,8 +4,7 @@ import Screen.AbstractScreen;
 
 import Utils.InputUtil;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 
 public class RecordTuitionScreen extends AbstractScreen {
 
@@ -27,6 +26,7 @@ public class RecordTuitionScreen extends AbstractScreen {
         String status = InputUtil.getNonEmptyString("Trạng thái: ");
         String method = InputUtil.getNonEmptyString("Phương thức thanh toán: ");
         String note = InputUtil.getString("Ghi chú (nếu có): ");
+
     }
 }
 
