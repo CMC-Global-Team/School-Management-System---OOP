@@ -358,10 +358,44 @@ public class TuitionService {
         return repository.count();
     }
 
-
     private String truncate(String str, int maxLength) {
         if (str == null) return "";
         if (str.length() <= maxLength) return str;
         return str.substring(0, maxLength - 3) + "...";
+    }
+
+    /**
+     * Hiển thị kết quả tìm kiếm học phí
+     */
+    public void displaySearchResults(String keyword) {
+        List<Tuition> results = searchTuitions(keyword);
+
+        if (results.isEmpty()) {
+            System.out.println("\nKhông tìm thấy học phí nào phù hợp với từ khóa: '" + keyword + "'");
+            return;
+        }
+        System.out.println("\n┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                                     KẾT QUẢ TÌM KIẾM HỌC PHÍ                                                  │");
+        System.out.println("├───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-12s %-12s %-8s %-10s %-10s %-12s %-12s %-10s %-20s │%n",
+                "Mã HP", "Mã SV", "Học kỳ", "Năm học", "Số tiền", "Ngày TT", "Phương thức", "Trạng thái", "Ghi chú");
+        System.out.println("├───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤");
+
+        for (Tuition t : results) {
+            System.out.printf("│ %-12s %-12s %-8d %-10s %-10.2f %-12s %-12s %-10s %-20s │%n",
+                    truncate(t.getTuitionId(), 12),
+                    truncate(t.getStudentId(), 12),
+                    t.getSemester(),
+                    truncate(t.getSchoolYear(), 10),
+                    t.getAmount(),
+                    truncate(t.getPaymentDate() != null ? t.getPaymentDate().toString() : "", 12),
+                    truncate(t.getMethod(), 12),
+                    truncate(t.getStatus(), 10),
+                    truncate(t.getNote(), 20)
+            );
+        }
+
+        System.out.println("└───────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
+        System.out.println("Tìm thấy: " + results.size() + " học phí");
     }
 }
