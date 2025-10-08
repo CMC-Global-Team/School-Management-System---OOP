@@ -1,6 +1,7 @@
 package Utils;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
@@ -76,5 +77,16 @@ public class InputUtil {
         }
     }
 
-    
+    public static LocalTime getTime(String prompt) {
+        while (true) {
+            try {
+                System.out.print(prompt + " (HH:mm): ");
+                String input = scanner.nextLine().trim();
+                return LocalTime.parse(input, TIME_FORMATTER);
+            } catch (DateTimeParseException e) {
+                System.out.println("Vui lòng nhập thời gian theo định dạng HH:mm!");
+            }
+        }
+    }
+
 }
