@@ -237,5 +237,22 @@ public class StudentService {
                 .collect(java.util.stream.Collectors.toList());
     }
 
+    /**
+     * Lọc học sinh theo nhiều tiêu chí
+     */
+    public List<Student> filterStudents(String className, String status, String gender) {
+        return repository.findAll().stream()
+                .filter(student -> {
+                    boolean classMatch = className == null || className.trim().isEmpty() || 
+                                      student.getClassName().equalsIgnoreCase(className);
+                    boolean statusMatch = status == null || status.trim().isEmpty() || 
+                                        student.getStatus().equalsIgnoreCase(status);
+                    boolean genderMatch = gender == null || gender.trim().isEmpty() || 
+                                        student.getGender().equalsIgnoreCase(gender);
+                    return classMatch && statusMatch && genderMatch;
+                })
+                .collect(java.util.stream.Collectors.toList());
+    }
 
+    
 }
