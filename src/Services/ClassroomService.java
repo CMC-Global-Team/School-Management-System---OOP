@@ -137,5 +137,12 @@ public class ClassroomService {
         return repository.exists(classId);
     }
     
+    /**
+     * Đếm tổng số lớp học
+     */
+    public int getTotalClasses() {
+        return repository.count();
+    }
     
+
 }
