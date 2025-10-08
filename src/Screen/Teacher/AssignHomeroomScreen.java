@@ -2,6 +2,7 @@ package Screen.Teacher;
 
 import Models.Teacher;
 import Screen.AbstractScreen;
+import Services.FileManager;
 import Utils.FileUtil;
 import Utils.InputUtil;
 
@@ -23,8 +24,8 @@ public class AssignHomeroomScreen extends AbstractScreen {
         List<Teacher> teachers = new ArrayList<>();
 
         try {
-            if (FileUtil.fileExists("src/Data/teachers.txt")) {
-                teacherLines = FileUtil.readLines("src/Data/teachers.txt");
+            if (FileUtil.fileExists(FileManager.TEACHER_FILE)) {
+                teacherLines = FileUtil.readLines(FileManager.TEACHER_FILE);
                 for (String line : teacherLines) {
                     Teacher t = Teacher.fromString(line);
                     if (t != null) teachers.add(t);
@@ -74,7 +75,7 @@ public class AssignHomeroomScreen extends AbstractScreen {
         }
 
         try {
-            FileUtil.writeLines("src/Data/teachers.txt", updatedLines);
+            FileUtil.writeLines(FileManager.TEACHER_FILE, updatedLines);
             System.out.println("\nĐã cập nhật lớp chủ nhiệm cho giáo viên!");
         } catch (Exception e) {
             System.out.println("Lỗi khi ghi file: " + e.getMessage());

@@ -2,6 +2,7 @@ package Screen.Teacher;
 
 import Models.Teacher;
 import Screen.AbstractScreen;
+import Services.FileManager;
 import Utils.FileUtil;
 import Utils.InputUtil;
 
@@ -24,7 +25,7 @@ public class AssignTeacherScreen extends AbstractScreen {
         // Đọc danh sách giáo viên
         List<String> teacherLines;
         try {
-            teacherLines = FileUtil.readLines("src/Data/teachers.txt");
+            teacherLines = FileUtil.readLines(FileManager.TEACHER_FILE);
         } catch (Exception e) {
             System.out.println("Lỗi đọc file giáo viên: " + e.getMessage());
             return;
@@ -78,7 +79,7 @@ public class AssignTeacherScreen extends AbstractScreen {
         // Lưu lại vào file
         teacherLines.set(selectedIndex, selectedTeacher.toFileString());
         try {
-            FileUtil.writeLines("src/Data/teachers.txt", teacherLines);
+            FileUtil.writeLines(FileManager.TEACHER_FILE, teacherLines);
             System.out.println("\nĐã phân công giảng dạy thành công!");
         } catch (Exception e) {
             System.out.println("Lỗi khi ghi file: " + e.getMessage());
