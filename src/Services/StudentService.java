@@ -292,5 +292,12 @@ public class StudentService {
         }
     }
 
+    /**
+     * Xuất tất cả học sinh ra file .txt
+     */
+    public boolean exportAllStudentsToFile(String filename) {
+        return exportStudentsToFile(filename, getAllStudents());
+    }
+
     
 }
