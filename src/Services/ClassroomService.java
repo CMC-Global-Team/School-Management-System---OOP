@@ -116,5 +116,12 @@ public class ClassroomService {
         return repository.findById(classId);
     }
     
-
+    /**
+     * Lấy tất cả lớp học
+     */
+    public List<Classroom> getAllClasses() {
+        return repository.findAll();
+    }
+    
+    
 }
