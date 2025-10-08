@@ -323,4 +323,11 @@ public class TuitionService {
         return repository.findById(tuitionId);
     }
 
+    /**
+     * Lấy tất cả học phí
+     */
+    public List<Tuition> getAllTuitions() {
+        return repository.findAll();
+    }
+
 }
