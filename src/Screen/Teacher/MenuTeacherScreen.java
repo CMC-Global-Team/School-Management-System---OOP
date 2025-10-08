@@ -10,6 +10,7 @@ public class MenuTeacherScreen extends AbstractScreen {
     private final ListTeacherScreen listScreen;
     private final AssignTeacherScreen assignTeacherScreen;
     private final AssignHomeroomScreen assignHomeroomScreen;
+    private final ExportTeacherScreen exportTeacherScreen;
 
     public MenuTeacherScreen() {
         super();
@@ -20,8 +21,7 @@ public class MenuTeacherScreen extends AbstractScreen {
         this.listScreen = new ListTeacherScreen();
         this.assignTeacherScreen = new AssignTeacherScreen();
         this.assignHomeroomScreen = new AssignHomeroomScreen();
-
-
+        this.exportTeacherScreen = new ExportTeacherScreen();
     }
 
     @Override
@@ -73,13 +73,18 @@ public class MenuTeacherScreen extends AbstractScreen {
                     pause();
                     break;
                 case 6:
-                    assignTeacherScreen.display();
-                    assignTeacherScreen.handleInput();
+                    assignHomeroomScreen.display();
+                    assignHomeroomScreen.handleInput();
                     pause();
                     break;
                 case 7:
                     assignTeacherScreen.display();
                     assignTeacherScreen.handleInput();
+                    pause();
+                    break;
+                case 8:
+                    exportTeacherScreen.display();
+                    exportTeacherScreen.handleInput();
                     pause();
                     break;
                 case 0:
