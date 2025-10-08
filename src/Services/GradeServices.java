@@ -6,6 +6,7 @@ import Utils.InputUtil;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GradeServices {
     private static GradeServices instance;
@@ -180,5 +181,19 @@ public class GradeServices {
         int start = InputUtil.getInt("Năm bắt đầu: ");
         int end = InputUtil.getInt("Năm kết thúc: ");
         return start + " - " + end;
+    }
+
+    /**
+     * Tìm điểm theo ID
+     */
+    public Optional<Grade> findById(String GradeID) {
+        return repository.findById(GradeID);
+    }
+
+    /**
+     * Đếm tổng số bản ghi
+     */
+    public int getTotalGradeRecords() {
+        return repository.count();
     }
 }
