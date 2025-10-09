@@ -105,22 +105,30 @@ public class Grade implements IEntity {
 
 
     public static Grade fromString(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
+        
         String[] parts = line.split(",");
-        if (parts.length != 9) return null;
+        if (parts.length != 9) {
+            System.err.println("Lỗi parse Grade: Số phần tử không đúng. Cần 9 phần tử, nhận được " + parts.length);
+            return null;
+        }
+        
         try {
             return new Grade(
-                    parts[0],
-                    parts[1],
-                    parts[2],
-                    parts[3],
-                    Double.parseDouble(parts[4]),
-                    Integer.parseInt(parts[5]),
-                    parts[6],
-                    LocalDate.parse(parts[7]),
-                    parts[8]
+                    parts[0].trim(),
+                    parts[1].trim(),
+                    parts[2].trim(),
+                    parts[3].trim(),
+                    Double.parseDouble(parts[4].trim()),
+                    Integer.parseInt(parts[5].trim()),
+                    parts[6].trim(),
+                    LocalDate.parse(parts[7].trim()),
+                    parts[8].trim()
             );
         } catch (Exception e) {
-            System.err.println("Lỗi parse Student: " + e.getMessage());
+            System.err.println("Lỗi parse Grade: " + e.getMessage());
             return null;
         }
     }
@@ -136,9 +144,9 @@ public class Grade implements IEntity {
 
     @Override
     public String toFileString() {
-        // Format: classId,className,schoolYear,course
+        // Format: gradeId,studentId,subjectId,gradeType,score,semester,schoolYear,inputDate,note
         return gradeId + "," + studentId + "," + subjectId + "," + gradeType + "," +
-                score + "," + semester + "," + schoolYear + "," + inputDate + "," + note;
+                score + "," + semester + "," + schoolYear + "," + inputDate + "," + (note != null ? note : "");
     }
 
     @Override

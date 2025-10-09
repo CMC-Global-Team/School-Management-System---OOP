@@ -126,6 +126,7 @@ public abstract class BaseFileRepository<T extends IEntity> implements IReposito
             
             List<String> lines = FileUtil.readLines(filePath);
             entities = lines.stream()
+                    .filter(line -> line != null && !line.trim().isEmpty()) // Lọc bỏ dòng trống
                     .map(this::parseFromString)
                     .filter(e -> e != null)
                     .collect(Collectors.toList());

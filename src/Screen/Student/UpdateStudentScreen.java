@@ -3,10 +3,10 @@ package Screen.Student;
 import Models.Classroom;
 import Models.Student;
 import Screen.AbstractScreen;
+import Services.FileManager;
 import Services.StudentService;
 import Utils.FileUtil;
 import Utils.InputUtil;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -71,8 +71,8 @@ public class UpdateStudentScreen extends AbstractScreen {
         System.out.println("\nDanh sách lớp học hiện có:");
         List<Classroom> classrooms = new ArrayList<>();
         try {
-            if (FileUtil.fileExists("data/classrooms.txt")) {
-                List<String> lines = FileUtil.readLines("data/classrooms.txt");
+            if (FileUtil.fileExists(FileManager.CLASSROOM_FILE)) {
+                List<String> lines = FileUtil.readLines(FileManager.CLASSROOM_FILE);
                 for (String line : lines) {
                     Classroom c = Classroom.fromString(line);
                     if (c != null) classrooms.add(c);

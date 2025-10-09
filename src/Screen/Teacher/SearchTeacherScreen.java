@@ -1,11 +1,9 @@
 package Screen.Teacher;
 
-import Screen.AbstractScreen;
 import Models.Teacher;
+import Screen.AbstractScreen;
 import Services.TeacherService;
 import Utils.InputUtil;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +16,19 @@ public class SearchTeacherScreen extends AbstractScreen {
         System.out.println("┌──────────────────────────────────────────────┐");
         System.out.println("│           TÌM KIẾM THÔNG TIN GIÁO VIÊN       │");
         System.out.println("└──────────────────────────────────────────────┘");
+        
+        System.out.println("\nHƯỚNG DẪN CHI TIẾT:");
+        System.out.println("┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           CÁC TIÊU CHÍ TÌM KIẾM                         │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ 1. Theo mã giáo viên: Nhập mã GV (VD: GV0001)                          │");
+        System.out.println("│ 2. Theo họ tên: Nhập tên hoặc một phần tên giáo viên                   │");
+        System.out.println("│ 3. Theo môn dạy: Nhập tên môn học mà giáo viên đang dạy                │");
+        System.out.println("│ 4. Theo lớp chủ nhiệm: Nhập tên lớp mà giáo viên làm chủ nhiệm         │");
+        System.out.println("│                                                                         │");
+        System.out.println("│ LƯU Ý: Tìm kiếm không phân biệt hoa thường                             │");
+        System.out.println("│         Có thể tìm kiếm một phần từ khóa                               │");
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
     }
 
     @Override

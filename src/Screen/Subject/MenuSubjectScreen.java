@@ -40,6 +40,29 @@ public class MenuSubjectScreen extends AbstractScreen {
         System.out.println("│  7. Danh Sách Tất Cả Môn Học             │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
+        
+        // Hiển thị tutorial
+        displayTutorial();
+    }
+    
+    private void displayTutorial() {
+        System.out.println("\n┌──────────────────────────────────────────┐");
+        System.out.println("│              HƯỚNG DẪN SỬ DỤNG             │");
+        System.out.println("├──────────────────────────────────────────┤");
+        System.out.println("│ 1. Thêm Môn Học: Tạo môn học mới với     │");
+        System.out.println("│    mã, tên, số tiết, hệ số, loại môn     │");
+        System.out.println("│ 2. Cập Nhật: Sửa đổi thông tin môn học   │");
+        System.out.println("│    đã có trong hệ thống                   │");
+        System.out.println("│ 3. Xóa Môn Học: Loại bỏ môn học khỏi     │");
+        System.out.println("│    hệ thống                               │");
+        System.out.println("│ 4. Tìm Kiếm: Tìm môn học theo từ khóa    │");
+        System.out.println("│ 5. Gán Giáo Viên: Phân công giáo viên    │");
+        System.out.println("│    phụ trách môn học                      │");
+        System.out.println("│ 6. Chỉnh Sửa: Cập nhật chi tiết chương   │");
+        System.out.println("│    trình học của môn học                  │");
+        System.out.println("│ 7. Danh Sách: Xem tất cả môn học         │");
+        System.out.println("│ 0. Quay Lại: Trở về menu chính           │");
+        System.out.println("└──────────────────────────────────────────┘");
     }
 
 

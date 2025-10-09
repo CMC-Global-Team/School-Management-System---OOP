@@ -1,19 +1,16 @@
 package Screen.Grade;
 
-
-
 import Screen.AbstractScreen;
 
-
 public class MenuGrade extends AbstractScreen {
-    private final EnterGradeScreen enterGradeScreen ;
+    private final EnterGradeScreen enterGradeScreen;
     private final EditGradeScreen editGradeScreen;
     private final DeleteGradeScreen deleteGradeScreen;
     private final SearchForStudentGradesScreen searchForStudentGradesScreen;
     private final AverageGradeScreen averageGradeScreen;
     private final GradeClassificationScreen gradeClassificationScreen;
-    private final ReportScreen reportScreen;
-    private final ExportScreen exportScreen;
+    private final ClassGradeReportScreen classGradeReportScreen;
+    private final ExportGradeListScreen exportGradeListScreen;
 
     public MenuGrade() {
         super();
@@ -23,23 +20,23 @@ public class MenuGrade extends AbstractScreen {
         this.searchForStudentGradesScreen = new SearchForStudentGradesScreen();
         this.averageGradeScreen = new AverageGradeScreen();
         this.gradeClassificationScreen = new GradeClassificationScreen();
-        this.reportScreen = new ReportScreen();
-        this.exportScreen = new ExportScreen();
-
+        this.classGradeReportScreen = new ClassGradeReportScreen();
+        this.exportGradeListScreen = new ExportGradeListScreen();
     }
+    
     @Override
     public void display() {
         System.out.println("┌──────────────────────────────────────────┐");
         System.out.println("│           HỆ THỐNG QUẢN LÝ ĐIỂM          │");
         System.out.println("├──────────────────────────────────────────┤");
-        System.out.println("│  1. Nhập điểm cho học sinh               │");
-        System.out.println("│  2. Sửa điểm đã nhập                     │");
-        System.out.println("│  3. Xoá điểm                             │");
-        System.out.println("│  4. Tìm kiếm điểm học sinh               │");
-        System.out.println("│  5. Tính điểm trung bình                 │");
-        System.out.println("│  6. Xếp loại học lực                     │");
-        System.out.println("│  7. Báo cáo điểm lớp                     │");
-        System.out.println("│  8. Xuất danh sách điểm                  │");
+        System.out.println("│  1. Nhập Điểm Cho Học Sinh               │");
+        System.out.println("│  2. Sửa Điểm Đã Nhập                     │");
+        System.out.println("│  3. Xóa Điểm                             │");
+        System.out.println("│  4. Tìm Kiếm Điểm Học Sinh               │");
+        System.out.println("│  5. Tính Điểm Trung Bình                 │");
+        System.out.println("│  6. Xếp Loại Học Lực                     │");
+        System.out.println("│  7. Báo Cáo Điểm Lớp                     │");
+        System.out.println("│  8. Xuất Danh Sách Điểm                  │");
         System.out.println("│  0. Quay Lại Menu Chính                  │");
         System.out.println("└──────────────────────────────────────────┘");
     }
@@ -50,7 +47,7 @@ public class MenuGrade extends AbstractScreen {
         while (running) {
             clearScreen();
             display();
-            int choice = inputInt("Nhâp lựa chọn của bạn: ");
+            int choice = inputInt("Nhập lựa chọn của bạn: ");
 
             switch (choice) {
                 case 1:
@@ -78,19 +75,19 @@ public class MenuGrade extends AbstractScreen {
                     gradeClassificationScreen.handleInput();
                     break;
                 case 7:
-                    reportScreen.display();
-                    reportScreen.handleInput();
+                    classGradeReportScreen.display();
+                    classGradeReportScreen.handleInput();
                     break;
                 case 8:
-                    exportScreen.display();
-                    exportScreen.handleInput();
+                    exportGradeListScreen.display();
+                    exportGradeListScreen.handleInput();
                     break;
                 case 0:
                     System.out.println("\nĐang quay lại menu chính...");
                     running = false;
                     break;
                 default:
-                    System.out.println("\n Lựa chọn không hợp lệ, vui lòng thử lại");
+                    System.out.println("\nLựa chọn không hợp lệ, vui lòng thử lại");
                     pause();
                     break;
             }

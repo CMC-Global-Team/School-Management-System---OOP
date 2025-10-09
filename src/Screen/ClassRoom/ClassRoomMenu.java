@@ -1,6 +1,7 @@
 package Screen.ClassRoom;
 
 import Screen.AbstractScreen;
+import Utils.InputUtil;
 
 public class ClassRoomMenu extends AbstractScreen {
     private final AddClassRoomScreen addScreen;
@@ -21,7 +22,7 @@ public class ClassRoomMenu extends AbstractScreen {
     @Override
     public void display() {
         System.out.println("┌──────────────────────────────────────────┐");
-        System.out.println("│        HỆ THỐNG QUẢN LÝ LỚP HỌC          │");
+        System.out.println("│        Hệ Thống Quản Lý Lớp Học           │");
         System.out.println("├──────────────────────────────────────────┤");
         System.out.println("│  1. Thêm Lớp Học Mới                     │");
         System.out.println("│  2. Tìm Kiếm Lớp Học                     │");
@@ -36,9 +37,8 @@ public class ClassRoomMenu extends AbstractScreen {
     public void handleInput() {
         boolean running = true;
         while (running) {
-            clearScreen();
             display();
-            int choice = inputInt("Nhap lua chon cua ban: ");
+            int choice = InputUtil.getInt("Nhập lựa chọn của bạn: ");
 
             switch (choice) {
                 case 1:
@@ -62,11 +62,11 @@ public class ClassRoomMenu extends AbstractScreen {
                     listScreen.handleInput();
                     break;
                 case 0:
-                    System.out.println("\nDang quay lai menu chinh...");
+                    System.out.println("\nĐang quay lại menu chính...");
                     running = false;
                     break;
                 default:
-                    System.out.println("\nLua chon khong hop le. Vui long thu lai.");
+                    System.out.println("\nLựa chọn không hợp lệ! Vui lòng thử lại.");
                     pause();
             }
         }

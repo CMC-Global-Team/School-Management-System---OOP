@@ -1,11 +1,10 @@
 package Screen.Subject;
 
-import Screen.AbstractScreen;
 import Models.Subject;
 import Models.Teacher;
+import Screen.AbstractScreen;
 import Services.SubjectService;
 import Services.TeacherService;
-
 import java.util.*;
 
 /**
@@ -29,6 +28,9 @@ public class AssignTeacherScreen extends AbstractScreen {
         System.out.println("┌─────────────────────────────┐");
         System.out.println("│  GÁN GIÁO VIÊN CHO MÔN HỌC │");
         System.out.println("└─────────────────────────────┘");
+        
+        // Hiển thị tutorial
+        displayTutorial();
 
         // Hiển thị danh sách môn học
         subjectService.displayAllSubjects();
@@ -37,6 +39,24 @@ public class AssignTeacherScreen extends AbstractScreen {
         teacherService.displayAllTeachers();
 
         System.out.println("Nhấn Enter để tiếp tục gán giáo viên...");
+    }
+    
+    private void displayTutorial() {
+        System.out.println("\n┌──────────────────────────────────────────┐");
+        System.out.println("│         HƯỚNG DẪN GÁN GIÁO VIÊN          │");
+        System.out.println("├──────────────────────────────────────────┤");
+        System.out.println("│ Bước 1: Xem danh sách môn học và giáo viên│");
+        System.out.println("│ Bước 2: Nhập mã môn học cần gán giáo viên │");
+        System.out.println("│ Bước 3: Nhập mã giáo viên (cách nhau bởi │");
+        System.out.println("│         dấu phẩy nếu nhiều giáo viên)     │");
+        System.out.println("│ Bước 4: Hệ thống sẽ kiểm tra và gán       │");
+        System.out.println("│                                          │");
+        System.out.println("│ Lưu ý:                                     │");
+        System.out.println("│ - Mã môn học và giáo viên phải tồn tại    │");
+        System.out.println("│ - Có thể gán nhiều giáo viên cho 1 môn    │");
+        System.out.println("│ - Ví dụ: GV001,GV002,GV003               │");
+        System.out.println("│ - Giáo viên không tồn tại sẽ bị bỏ qua   │");
+        System.out.println("└──────────────────────────────────────────┘");
     }
 
     @Override

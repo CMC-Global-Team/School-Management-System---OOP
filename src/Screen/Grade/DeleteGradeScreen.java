@@ -34,7 +34,7 @@ public class DeleteGradeScreen extends AbstractScreen {
         }
 
         Grade grade = gradeList.get();
-        System.out.println("\nĐã tìm thấy lớp học:");
+        System.out.println("\nĐã tìm thấy điểm:");
         System.out.println(grade.toString());
 
 

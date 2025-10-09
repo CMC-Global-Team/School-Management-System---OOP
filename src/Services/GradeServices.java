@@ -2,7 +2,6 @@ package Services;
 
 import Models.Grade;
 import Utils.InputUtil;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class GradeServices {
     }
 
     /**
-     * Lấy instance duy nhất của ClassroomService (Singleton)
+     * Lấy instance duy nhất của GradeServices (Singleton)
      */
     public static GradeServices getInstance() {
         if (instance == null) {
@@ -25,22 +24,107 @@ public class GradeServices {
         }
         return instance;
     }
+    
+    /**
+     * Kiểm tra mã điểm đã tồn tại chưa
+     */
+    public boolean isGradeIdExists(String gradeId) {
+        return repository.exists(gradeId);
+    }
 
     /**
-     * Thêm điểm mới
+     * Thêm điểm mới với đầy đủ tham số
+     */
+    public boolean addGrade(String gradeID, String studentID, String subjectID, String gradeType, 
+                           double score, int semester, String schoolYear, LocalDate inputDate, String note) {
+        
+        // Validate input
+        if (gradeID == null || gradeID.trim().isEmpty()) {
+            System.out.println("Mã điểm không được để trống!");
+            return false;
+        }
+        
+        if (!gradeID.matches("^D\\d{4}$")) {
+            System.out.println("Mã điểm sai định dạng! (VD: D0001)");
+            return false;
+        }
+        
+        if (repository.exists(gradeID)) {
+            System.out.println("Mã điểm '" + gradeID + "' đã tồn tại trong hệ thống!");
+            return false;
+        }
+        
+        if (!StudentService.getInstance().isStudentIdExists(studentID)) {
+            System.out.println("Không tìm thấy học sinh có mã '" + studentID + "' trong hệ thống!");
+            return false;
+        }
+        
+        if (!SubjectService.getInstance().isSubjectIdExists(subjectID)) {
+            System.out.println("Không tìm thấy môn học có mã '" + subjectID + "' trong hệ thống!");
+            return false;
+        }
+        
+        if (score < 0 || score > 10) {
+            System.out.println("Điểm số phải trong khoảng 0.0 - 10.0!");
+            return false;
+        }
+        
+        if (semester < 1 || semester > 2) {
+            System.out.println("Học kỳ phải là 1 hoặc 2!");
+            return false;
+        }
+        
+        if (schoolYear == null || schoolYear.trim().isEmpty() || !schoolYear.matches("^\\d{4}-\\d{4}$")) {
+            System.out.println("Năm học sai định dạng! (VD: 2024-2025)");
+            return false;
+        }
+        
+        // Kiểm tra năm học hợp lệ
+        String[] parts = schoolYear.split("-");
+        int startYear = Integer.parseInt(parts[0]);
+        int endYear = Integer.parseInt(parts[1]);
+        if (startYear > endYear) {
+            System.out.println("Năm học không hợp lệ! Năm bắt đầu phải nhỏ hơn hoặc bằng năm kết thúc");
+            return false;
+        }
+        
+        if (inputDate == null) {
+            System.out.println("Ngày nhập không được để trống!");
+            return false;
+        }
+        
+        // Kiểm tra trùng loại điểm
+        if (isExistGradeType(semester, subjectID, studentID, gradeType)) {
+            System.out.println("Loại điểm '" + gradeType + "' đã tồn tại cho học sinh này trong học kỳ " + semester + "!");
+            return false;
+        }
+        
+        Grade grade = new Grade(gradeID, studentID, subjectID, gradeType, score, semester, schoolYear, inputDate, note);
+        
+        if (repository.add(grade)) {
+            System.out.println("Thêm điểm thành công!");
+            return true;
+        } else {
+            System.out.println("Thêm điểm thất bại!");
+            return false;
+        }
+    }
+
+    /**
+     * Thêm điểm mới (phương thức cũ để tương thích)
      */
     public boolean addGrade(String gradeID, String studentID, String subjectID, int gradeType) {
 
         // Validate input
-        if (StudentService.getInstance().isStudentIdExists(studentID)) {
+        if (!StudentService.getInstance().isStudentIdExists(studentID)) {
             System.out.println("Không tìm thấy học sinh có mã: " + studentID);
             return false;
         }
-        if (SubjectService.getInstance().isSubjectIdExists(subjectID)) {
+        if (!SubjectService.getInstance().isSubjectIdExists(subjectID)) {
             System.out.println("Không tìm thấy môn học có mã: " + subjectID);
             return false;
         }
-        if (isGradeIDExists(gradeID)) {
+        if (repository.exists(gradeID)) {
             System.out.println("Mã điểm " + gradeID + " đã tồn tại!");
             return false;
         }
@@ -264,4 +348,176 @@ public class GradeServices {
         }
         return str.substring(0, maxLength - 3) + "...";
     }
+
+    public void AverageScore(String studentID){
+        List<Grade> gradesStudent = getAllGradeByStudentID(studentID);
+        if (gradesStudent.isEmpty()) {
+            System.out.println("Không có điểm nào cho học sinh: " + studentID);
+            return;
+        }
+        
+        double totalWeightedGrade = 0;
+        double totalCoefficient = 0;
+        
+        // Lấy danh sách các môn học duy nhất
+        List<String> uniqueSubjects = gradesStudent.stream()
+                .map(Grade::getSubjectId)
+                .distinct()
+                .collect(java.util.stream.Collectors.toList());
+        
+        System.out.println("\n┌─────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           ĐIỂM TRUNG BÌNH TỪNG MÔN                        │");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ %-15s │ %-12s │ %-12s │ %-12s │ %-12s │%n", 
+            "Môn học", "Thường xuyên", "Giữa kỳ", "Cuối kỳ", "TB môn");
+        System.out.println("├─────────────────────────────────────────────────────────────────────────┤");
+        
+        for (String subjectId : uniqueSubjects) {
+            List<Grade> subjectGrades = getAllGradeBySubjectID(subjectId, studentID);
+            
+            double txScore = 0, gkScore = 0, ckScore = 0;
+            boolean hasTx = false, hasGk = false, hasCk = false;
+            
+            for (Grade grade : subjectGrades) {
+                switch (grade.getGradeType().toLowerCase()) {
+                    case "thuong xuyen":
+                        txScore = grade.getScore();
+                        hasTx = true;
+                        break;
+                    case "giua ky":
+                        gkScore = grade.getScore();
+                        hasGk = true;
+                        break;
+                    case "cuoi ky":
+                        ckScore = grade.getScore();
+                        hasCk = true;
+                        break;
+                }
+            }
+            
+            // Tính điểm trung bình môn
+            double subjectAverage = 0;
+            if (hasTx && hasGk && hasCk) {
+                subjectAverage = (txScore * 0.2 + gkScore * 0.3 + ckScore * 0.5);
+            } else if (hasTx && hasCk) {
+                subjectAverage = (txScore * 0.3 + ckScore * 0.7);
+            } else if (hasGk && hasCk) {
+                subjectAverage = (gkScore * 0.4 + ckScore * 0.6);
+            } else if (hasCk) {
+                subjectAverage = ckScore;
+            } else {
+                System.out.printf("│ %-15s │ %-12s │ %-12s │ %-12s │ %-12s │%n", 
+                    subjectId, "Chưa có", "Chưa có", "Chưa có", "Chưa đủ");
+                continue;
+            }
+            
+            System.out.printf("│ %-15s │ %-12.1f │ %-12.1f │ %-12.1f │ %-12.2f │%n", 
+                subjectId, txScore, gkScore, ckScore, subjectAverage);
+            
+            // Lấy hệ số môn học
+            var subjectOpt = SubjectService.getInstance().findById(subjectId);
+            if (subjectOpt.isPresent()) {
+                double coefficient = subjectOpt.get().getConfficient();
+                totalWeightedGrade += subjectAverage * coefficient;
+                totalCoefficient += coefficient;
+            }
+        }
+        
+        System.out.println("└─────────────────────────────────────────────────────────────────────────┘");
+        
+        if (totalCoefficient > 0) {
+            double finalAverage = totalWeightedGrade / totalCoefficient;
+            System.out.printf("\nĐiểm trung bình tổng kết: %.2f%n", finalAverage);
+            
+            // Xếp loại học lực
+            String classification = getClassification(finalAverage);
+            System.out.println("Xếp loại học lực: " + classification);
+        } else {
+            System.out.println("Không thể tính điểm trung bình do thiếu hệ số môn học.");
+        }
+    }
+
+    public double DAverageScore(String studentID){
+        List<Grade> gradesStudent = getAllGradeByStudentID(studentID);
+        if (gradesStudent.isEmpty()) {
+            return 0.0;
+        }
+        
+        double totalWeightedGrade = 0;
+        double totalCoefficient = 0;
+        
+        // Lấy danh sách các môn học duy nhất
+        List<String> uniqueSubjects = gradesStudent.stream()
+                .map(Grade::getSubjectId)
+                .distinct()
+                .collect(java.util.stream.Collectors.toList());
+        
+        for (String subjectId : uniqueSubjects) {
+            List<Grade> subjectGrades = getAllGradeBySubjectID(subjectId, studentID);
+            
+            double txScore = 0, gkScore = 0, ckScore = 0;
+            boolean hasTx = false, hasGk = false, hasCk = false;
+            
+            for (Grade grade : subjectGrades) {
+                switch (grade.getGradeType().toLowerCase()) {
+                    case "thuong xuyen":
+                        txScore = grade.getScore();
+                        hasTx = true;
+                        break;
+                    case "giua ky":
+                        gkScore = grade.getScore();
+                        hasGk = true;
+                        break;
+                    case "cuoi ky":
+                        ckScore = grade.getScore();
+                        hasCk = true;
+                        break;
+                }
+            }
+            
+            // Tính điểm trung bình môn
+            double subjectAverage = 0;
+            if (hasTx && hasGk && hasCk) {
+                subjectAverage = (txScore * 0.2 + gkScore * 0.3 + ckScore * 0.5);
+            } else if (hasTx && hasCk) {
+                subjectAverage = (txScore * 0.3 + ckScore * 0.7);
+            } else if (hasGk && hasCk) {
+                subjectAverage = (gkScore * 0.4 + ckScore * 0.6);
+            } else if (hasCk) {
+                subjectAverage = ckScore;
+            } else {
+                continue; // Bỏ qua môn chưa đủ điểm
+            }
+            
+            // Lấy hệ số môn học
+            var subjectOpt = SubjectService.getInstance().findById(subjectId);
+            if (subjectOpt.isPresent()) {
+                double coefficient = subjectOpt.get().getConfficient();
+                totalWeightedGrade += subjectAverage * coefficient;
+                totalCoefficient += coefficient;
+            }
+        }
+        
+        return totalCoefficient > 0 ? totalWeightedGrade / totalCoefficient : 0.0;
+    }
+    
+    /**
+     * Xếp loại học lực dựa trên điểm trung bình
+     */
+    public String getClassification(double averageScore) {
+        if (averageScore >= 9.0) {
+            return "Xuất sắc";
+        } else if (averageScore >= 8.0) {
+            return "Giỏi";
+        } else if (averageScore >= 6.5) {
+            return "Khá";
+        } else if (averageScore >= 5.0) {
+            return "Trung bình";
+        } else if (averageScore >= 3.5) {
+            return "Yếu";
+        } else {
+            return "Kém";
+        }
+    }
+
 }
